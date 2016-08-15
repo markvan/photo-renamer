@@ -4,7 +4,7 @@ class PictureLibrary
     @dir = dir
     @dir += '/' unless @dir =~ /\/$/
     @index = -1
-    @files = Dir[@dir+'*']
+    @files = Dir[@dir+'*'].sort_by(&:downcase)
     true
   end
 
@@ -38,7 +38,7 @@ class PictureLibrary
     if next_file_name =~ /.[jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF]$/
       image.file = next_file_name
     else
-      image.file = './picture.jpg'
+      image.file = './code/picture.jpg'
     end
     image
   end
@@ -48,9 +48,8 @@ class PictureLibrary
     @file_name = @files[@index]
   end
 
-
   def previous
-    @index == 0 ? @files.count - 1 : @index -= 1
+    @index == 0 ? @index = @files.count - 1 : @index -= 1
     @file_name = @files[@index]
   end
 

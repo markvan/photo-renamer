@@ -1,5 +1,5 @@
 require 'tk'
 require 'tkextlib/tkimg'
-require './picture_library'
-require './picture_view'
-require './image_file_name'
+require './code/picture_library'
+require './code/picture_view'
+require './code/image_file_name'

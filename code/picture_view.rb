@@ -1,10 +1,16 @@
 class PictureView
+
+  LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
+
+  TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
+
   def initialize(dir, original_name, insertion_text, new_name)
-    @picture_library = PictureLibrary.new(dir)
-    @old_name = original_name
+    @dir = dir
+    @original_name = original_name
     @insertion_text = insertion_text
     @new_name = new_name
     @picture_view = TkLabel.new($root)
+    @picture_library = PictureLibrary.new(dir)
     set(@picture_library.next_image)
   end
 
@@ -28,12 +34,18 @@ class PictureView
   private
 
   def new_name(insert_str)
-    m = @old_name.value.match(/IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)/)
+    file_name = ImageFileName.new(@original_name)
+    m = file_name.match(LENOVO_PATTERN)
     if m
       @new_name.value = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
     else
-      n = @old_name.value.match(/(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)  [\w ]+  (\..*)/)
-      @new_name.value = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
+      n =file_name.match(TRANSFORMED_PATTERN)
+      if n
+        new_insert_str(insert_str)
+        @new_name.value = "#{n[1]}.#{n[2]}.#{n[3]}__#{n[4]}.#{n[5]}  #{insert_str} #{n[6]}"
+      else
+        @new_name.value = @original_name.value
+      end
     end
     @new_name.value
   end
@@ -43,8 +55,10 @@ class PictureView
     display_image = TkPhotoImage.new
     display_image.copy(image, subsample: [sample_every])
     @picture_view.image = display_image
-    @old_name.value = @picture_library.file_name.sub(/.*\//,'')
-    @new_name.value = new_name('')
+    @original_name.value = @picture_library.file_name.sub(/.*\//,'')
+    @new_name.value = @original_name.value
+    file_name = ImageFileName.new(@dir+@original_name.value)
+    @insertion_text.value = file_name.inserted_text
   end
 
   def set_insertion_text
