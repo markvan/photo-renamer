@@ -1,0 +1,5 @@
+require 'tk'
+require 'tkextlib/tkimg'
+require './picture_library'
+require './picture_view'
+require './image_file_name'
