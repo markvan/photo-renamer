@@ -36,7 +36,7 @@ class ImageLibrary
     if full_old_name != full_new_name
       File.rename(full_old_name, full_new_name)
       @files[@index] = full_new_name
-      puts "'#{full_old_name}' changed to '#{new_name}'"
+      puts "'#{full_old_name}' renamed '#{new_name}'"
     end
   end
 
