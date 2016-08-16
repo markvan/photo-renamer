@@ -33,12 +33,10 @@ class ImageLibrary
   def change_name(new_name)
     full_old_name = @files[@index]
     full_new_name = @dir+new_name
-    return false if File.exist?(full_old_name)
-    if full_old_name != full_new_name
-      File.rename(full_old_name, full_new_name)
-      @files[@index] = full_new_name
-      puts "'#{full_old_name}' renamed '#{new_name}'"
-    end
+    return false if File.exist?(full_new_name) || full_old_name == full_new_name
+    File.rename(full_old_name, full_new_name)
+    @files[@index] = full_new_name
+    puts "'#{full_old_name}' renamed '#{full_new_name}'"
     true
   end
 
