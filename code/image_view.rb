@@ -1,4 +1,4 @@
-class PictureView
+class ImageView
 
   LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
 
@@ -10,7 +10,7 @@ class PictureView
     @insertion_text = insertion_text
     @new_name = new_name
     @picture_view = TkLabel.new($root)
-    @picture_library = PictureLibrary.new(dir)
+    @picture_library = ImageLibrary.new(dir)
     set(@picture_library.next_image)
   end
 

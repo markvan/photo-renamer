@@ -4,7 +4,7 @@ describe "file names" do
 
   let(:dir) { Dir.pwd+'/spec/image_library/' }
   let(:full_file_name) { dir+short_file_name }
-  let(:picture_library) { PictureLibrary.new(dir) }
+  let(:picture_library) { ImageLibrary.new(dir) }
   let(:lenovo_file_name){ ImageFileName.new(picture_library.next_image.file) }
 
   describe "for lenovo" do
@@ -12,7 +12,7 @@ describe "file names" do
     let(:short_file_name) { 'IMG_20160403_172718.jpg' }
 
     before do
-      File.rename(PictureLibrary.new(dir).next_image.file, full_file_name)
+      File.rename(ImageLibrary.new(dir).next_image.file, full_file_name)
       picture_library
     end
 

@@ -4,16 +4,16 @@ describe "file names" do
 
   let(:dir) { Dir.pwd+'/spec/image_library/' }
 
-  let(:picture_library) { PictureLibrary.new(dir) }
+  let(:picture_library) { ImageLibrary.new(dir) }
   let(:lenovo_file_name) { ImageFileName.new(picture_library.next_image.file) }
 
   let(:short_file_name_1) { '2016.05.09__17.52  some text .jpg' }
   let(:short_file_name_2) { 'IMG_20160402_090136.jpg' }
   let(:short_file_name_3) { 'russian digital collage.jpg' }
   let(:short_file_name_4) { 'test no extension' }
-  let(:short_file_name_4_image) { '/code/picture.png' }
+  let(:short_file_name_4_image) { '/code/picture.jpg' }
   let(:short_file_name_5) { 'text.txt' }
-  let(:short_file_name_5_image) { '/code/picture.png' }
+  let(:short_file_name_5_image) { '/code/picture.jpg' }
   let(:full_file_name_1) { dir+short_file_name_1 }
   let(:full_file_name_2) { dir+short_file_name_2 }
   let(:full_file_name_3) { dir+short_file_name_3 }

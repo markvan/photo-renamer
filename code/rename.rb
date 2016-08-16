@@ -31,7 +31,7 @@ class Layout
     @new_name_label       = TkLabel.new(@root) { width label_width;   text '    Current' }
     @new_name             = TkEntry.new(@root) { width entry_width }
 
-    @@picture_view = PictureView.new('/Users/mark/Pictures/art', @original_name, @insertion_text, @new_name)
+    @@picture_view = ImageView.new('/Users/mark/Pictures/art', @original_name, @insertion_text, @new_name)
     @insertion_text.validatecommand([proc{|p| Layout.picture_view.new_insert_str(p)},'%P'])
 
     layout

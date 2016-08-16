@@ -1,4 +1,4 @@
-class PictureLibrary
+class ImageLibrary
 
   def initialize(dir)
     @dir = dir
