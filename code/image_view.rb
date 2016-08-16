@@ -12,6 +12,8 @@ class ImageView
     @current_name = new_name_widget
     @picture_view = TkLabel.new($root)
     set(@image_library.next_image)
+    @original_name.state = 'readonly'
+    @current_name.state = 'readonly'
   end
 
   def set_file_name_using_insert_str(insert_str)
@@ -23,7 +25,9 @@ class ImageView
         @insertion_text.highlightbackground = 'red'
       end
     end
+    @current_name.state = 'normal'
     @current_name.value = @image_library.short_file_name
+    @current_name.state = 'readonly'
   end
 
   def next_image
@@ -61,7 +65,9 @@ class ImageView
     display_image = TkPhotoImage.new
     display_image.copy(image, subsample: [sample_every])
     @picture_view.image   = display_image
+    @original_name.state = 'normal'
     @original_name.value  = @image_library.short_file_name
+    @original_name.state = 'readonly'
     @current_name.value       = @original_name.value
     fn = ImageFileName.new(image.file)
     if fn.matches_any?
