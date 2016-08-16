@@ -10,21 +10,22 @@ class ImageView
     @insertion_text = insertion_text
     @new_name = new_name
     @picture_view = TkLabel.new($root)
-    @picture_library = ImageLibrary.new(dir)
-    set(@picture_library.next_image)
+    @image_library = ImageLibrary.new(dir)
+    set(@image_library.next_image)
   end
 
   def new_insert_str(insert_str)
-    @picture_library.change_name(new_name(insert_str))
+    new_short_name = new_name(insert_str)
+    @image_library.change_name(new_short_name) unless new_short_name == @original_name.value
     true
   end
 
   def next_image
-    set(@picture_library.next_image)
+    set(@image_library.next_image)
   end
 
   def previous_image
-    set(@picture_library.previous_image)
+    set(@image_library.previous_image)
   end
 
   def tk_lable
@@ -34,6 +35,8 @@ class ImageView
   private
 
   def new_name(insert_str)
+    puts 'ImageView#new_name'
+
     file_name = ImageFileName.new(@original_name.value)
     m = file_name.match(LENOVO_PATTERN)
     if m
@@ -41,13 +44,12 @@ class ImageView
     else
       n =file_name.match(TRANSFORMED_PATTERN)
       if n
-        new_insert_str(insert_str)
-        @new_name.value = "#{n[1]}.#{n[2]}.#{n[3]}__#{n[4]}.#{n[5]}  #{insert_str} #{n[6]}"
+        @new_name.value = "#{n[1]}.#{n[2]}.#{n[3]}__#{n[4]}.#{n[5]}  #{insert_str} #{n[7]}"
       else
         @new_name.value = @original_name.value
       end
     end
-    @new_name.value
+    @new_name.value.strip
   end
 
   def set(image)
@@ -55,9 +57,9 @@ class ImageView
     display_image = TkPhotoImage.new
     display_image.copy(image, subsample: [sample_every])
     @picture_view.image   = display_image
-    @original_name.value  = @picture_library.short_file_name
+    @original_name.value  = @image_library.short_file_name
     @new_name.value       = @original_name.value
-    @insertion_text.value = @picture_library.inserted_text
+    @insertion_text.value = @image_library.inserted_text
   end
 
   def sampling(viewport, im_height, im_width)

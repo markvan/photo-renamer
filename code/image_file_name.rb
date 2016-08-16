@@ -9,7 +9,7 @@ class ImageFileName
   def initialize(name)
     puts name
     @short_file_name = name
-    @short_file_name = name.sub(/^\/.*\//, '') unless (name =~ /^\//) == 0
+    @short_file_name = name.sub(/^\/.*\//, '') if (name =~ /^\//) == 0
   end
 
   def inserted_text

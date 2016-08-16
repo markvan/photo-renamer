@@ -11,9 +11,9 @@ describe "file names" do
   let(:short_file_name_2) { 'IMG_20160402_090136.jpg' }
   let(:short_file_name_3) { 'russian digital collage.jpg' }
   let(:short_file_name_4) { 'test no extension' }
-  let(:short_file_name_4_image) { '/code/picture.jpg' }
+  let(:short_file_name_4_image) { '/code/no_renderer.jpg' }
   let(:short_file_name_5) { 'text.txt' }
-  let(:short_file_name_5_image) { '/code/picture.jpg' }
+  let(:short_file_name_5_image) { '/code/no_renderer.jpg' }
   let(:full_file_name_1) { dir+short_file_name_1 }
   let(:full_file_name_2) { dir+short_file_name_2 }
   let(:full_file_name_3) { dir+short_file_name_3 }

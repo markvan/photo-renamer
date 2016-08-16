@@ -1,7 +1,7 @@
 require 'tk'
 require 'tkextlib/tkimg'
-require './code/picture_library'
-require './code/picture_view'
+require './code/image_library'
+require './code/image_view'
 require './code/image_file_name'
 
 def ppp(*args)
