@@ -16,12 +16,14 @@ class ImageView
 
   def set_file_name_using_insert_str(insert_str)
     new_short_name = new_name(insert_str)
-    if new_short_name != @original_name.value
+    if @non_init && new_short_name != @original_name.value
       if @image_library.change_name(new_short_name)
         @insertion_text.highlightbackground = 'green'
       else
         @insertion_text.highlightbackground = 'red'
       end
+    else
+      @non_init = true
     end
   end
 
@@ -66,6 +68,7 @@ class ImageView
     fn = ImageFileName.new(image.file)
     @insertion_text.value = fn.inserted_text
     puts ">>> ImageView#set sets @insertion_text.value:#{@insertion_text.value}"
+    @non_init = false
 
   end
 

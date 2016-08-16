@@ -45,12 +45,12 @@ class ImageLibrary
   private
 
   def get_image(retriever)
+    @full_file_name = send(retriever)
     image = TkPhotoImage.new
-    full_file_name = send(retriever)
-    if File.directory?(full_file_name)
+    if File.directory?(@full_file_name)
       image.file = Dir.pwd+'/images/folder.jpg'
-    elsif full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
-      image.file = full_file_name
+    elsif @full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
+      image.file = @full_file_name
     else
       image.file = Dir.pwd+'/images/no_renderer.jpg'
     end
