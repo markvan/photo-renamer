@@ -17,15 +17,14 @@ class ImageLibrary
   end
 
   def full_file_name
-    @full_file_name
+    @files[@index]
   end
 
   def short_file_name
-    @full_file_name.sub(/^.*\//, '')
+    @files[@index].sub(/^.*\//, '')
   end
 
   def inserted_text
-    puts 'ImageLibrary#inserted_text'
     file_name = ImageFileName.new(@full_file_name)
     file_name.inserted_text
   end
