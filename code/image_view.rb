@@ -14,10 +14,15 @@ class ImageView
     set(@image_library.next_image)
   end
 
-  def new_insert_str(insert_str)
+  def set_file_name_using_insert_str(insert_str)
     new_short_name = new_name(insert_str)
-    @image_library.change_name(new_short_name) unless new_short_name == @original_name.value
-    true
+    if new_short_name != @original_name.value
+      if @image_library.change_name(new_short_name)
+        @insertion_text.highlightbackground = 'green'
+      else
+        @insertion_text.highlightbackground = 'red'
+      end
+    end
   end
 
   def next_image
@@ -35,8 +40,6 @@ class ImageView
   private
 
   def new_name(insert_str)
-    puts 'ImageView#new_name'
-
     file_name = ImageFileName.new(@original_name.value)
     m = file_name.match(LENOVO_PATTERN)
     if m
@@ -49,6 +52,7 @@ class ImageView
         @new_name.value = @original_name.value
       end
     end
+    puts "ImageView#new_name sets @new_name.value:#{@new_name.value}"
     @new_name.value.strip
   end
 
@@ -59,7 +63,10 @@ class ImageView
     @picture_view.image   = display_image
     @original_name.value  = @image_library.short_file_name
     @new_name.value       = @original_name.value
-    @insertion_text.value = @image_library.inserted_text
+    fn = ImageFileName.new(image.file)
+    @insertion_text.value = fn.inserted_text
+    puts ">>> ImageView#set sets @insertion_text.value:#{@insertion_text.value}"
+
   end
 
   def sampling(viewport, im_height, im_width)

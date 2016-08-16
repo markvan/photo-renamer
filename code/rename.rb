@@ -9,8 +9,8 @@ def ppp(*args)
 end
 
 class Layout
-  def self.picture_view
-    @@picture_view
+  def self.image_view
+    @@image_view
   end
 
   def initialize(width, height)
@@ -19,8 +19,8 @@ class Layout
     @root.title = 'Picture Renamer'
     @root.geometry("#{@viewport[0]+20}x#{@viewport[1]+20}")
 
-    @prev_button = TkButton.new(@root) { text 'prev'; command proc { Layout.picture_view.previous_image } }
-    @next_button = TkButton.new(@root) { text 'next'; command proc { Layout.picture_view.next_image } }
+    @prev_button = TkButton.new(@root) { text 'prev'; command proc { Layout.image_view.previous_image } }
+    @next_button = TkButton.new(@root) { text 'next'; command proc { Layout.image_view.next_image } }
 
     entry_width = 70
     label_width = 14
@@ -31,8 +31,8 @@ class Layout
     @new_name_label       = TkLabel.new(@root) { width label_width;   text '    Current' }
     @new_name             = TkEntry.new(@root) { width entry_width }
 
-    @@picture_view = ImageView.new('/Users/mark/Pictures/art', @original_name, @insertion_text, @new_name)
-    @insertion_text.validatecommand([proc{|p| Layout.picture_view.new_insert_str(p)},'%P'])
+    @@image_view = ImageView.new('/Users/mark/Pictures/art', @original_name, @insertion_text, @new_name)
+    @insertion_text.validatecommand([proc{|p| Layout.image_view.set_file_name_using_insert_str(p)}, '%P'])
 
     layout
   end
@@ -50,7 +50,7 @@ class Layout
     @new_name_label.grid('row' => 3, 'column' => 0, 'sticky' => 'e')
     @new_name.grid('row' => 3, 'column' => 1, 'sticky' => 'w')
 
-    @@picture_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 2, 'pady' => 25)
+    @@image_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 2, 'pady' => 25)
   end
 end
 

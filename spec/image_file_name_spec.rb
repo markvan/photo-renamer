@@ -1,11 +1,11 @@
 require './spec/support/spec_helper'
 
-describe "file names" do
+describe ImageFileName do
 
   let(:dir) { Dir.pwd+'/spec/image_library/' }
   let(:full_file_name) { dir+short_file_name }
-  let(:picture_library) { ImageLibrary.new(dir) }
-  let(:lenovo_file_name){ ImageFileName.new(picture_library.next_image.file) }
+  let(:image_library) { ImageLibrary.new(dir) }
+  let(:lenovo_file_name){ ImageFileName.new(image_library.next_image.file) }
 
   describe "for lenovo" do
 
@@ -13,21 +13,15 @@ describe "file names" do
 
     before do
       File.rename(ImageLibrary.new(dir).next_image.file, full_file_name)
-      picture_library
+      image_library
     end
 
     it "should reset" do
-      expect(picture_library.next_image.file).to eq full_file_name
-    end
-
-    it "should setup" do
-      expect(lenovo_file_name.short_file_name).to eq short_file_name
-      expect(lenovo_file_name.full_file_name).to eq full_file_name
-      expect(lenovo_file_name.directory).to eq dir
+      expect(image_library.next_image.file).to eq full_file_name
     end
 
     it "should recognise a lenovo file name" do
-      expect(lenovo_file_name.matches_lenovo?).to be true
+      expect(lenovo_file_name.matches_lenovo?).to be_truthy
     end
 
     it "should not be recognised as transformed" do
@@ -46,15 +40,24 @@ describe "file names" do
 
     it "should recognise a transformed file name" do
       transformed_file_name = ImageFileName.new(full_file_name)
-      expect(transformed_file_name.is_transformed?).to be true
+      expect(transformed_file_name.matches_transformed?).to be_truthy
       transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27  saving lives .jpg')
-      expect(transformed_file_name.is_transformed?).to be true
+      expect(transformed_file_name.matches_transformed?).to be_truthy
     end
 
     it "should reveal the correct inserted text" do
-      transformed_file_name = ImageFileName.new(full_file_name)
+      transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27.jpg')
       expect(transformed_file_name.inserted_text).to eq ''
+      transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27 .jpg')
+      expect(transformed_file_name.inserted_text).to eq ''
+      transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27    .jpg')
+      expect(transformed_file_name.inserted_text).to eq ''
+
+      transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27 saving lives .jpg')
+      expect(transformed_file_name.inserted_text).to eq 'saving lives'
       transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27  saving lives .jpg')
+      expect(transformed_file_name.inserted_text).to eq 'saving lives'
+      transformed_file_name = ImageFileName.new(dir+'2016.04.03__17.27    saving lives   .jpg')
       expect(transformed_file_name.inserted_text).to eq 'saving lives'
     end
   end

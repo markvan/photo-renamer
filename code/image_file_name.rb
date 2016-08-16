@@ -4,10 +4,10 @@ class ImageFileName
 
   LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
 
-  TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
+  TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)(.*)(\..*)$/
 
   def initialize(name)
-    puts name
+    puts "ImageFileName#initialize name:#{name}"
     @short_file_name = name
     @short_file_name = name.sub(/^\/.*\//, '') if (name =~ /^\//) == 0
   end
@@ -16,14 +16,13 @@ class ImageFileName
     ret = ''
     m = matches_transformed?
     ret = m[6].strip if m
+    puts "ImageFileName#inserted_text file:#{short_file_name} inserted text:#{ret}"
     ret
   end
 
   def match(pattern)
     @short_file_name.match(pattern)
   end
-
-  private
 
   def matches_lenovo?
     return false if match(TRANSFORMED_PATTERN)
