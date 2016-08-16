@@ -4,13 +4,13 @@ class ImageView
 
   TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
 
-  def initialize(dir, original_name, insertion_text, new_name)
-    dir =~ /\/$/ ? @dir = dir : @dir = dir + '/'
-    @original_name = original_name
-    @insertion_text = insertion_text
-    @new_name = new_name
+  def initialize(dir, original_name_widget, insertion_text_widget, new_name_widget)
+    @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
+    @image_library = ImageLibrary.new(@dir)
+    @original_name = original_name_widget
+    @insertion_text = insertion_text_widget
+    @current_name = new_name_widget
     @picture_view = TkLabel.new($root)
-    @image_library = ImageLibrary.new(dir)
     set(@image_library.next_image)
   end
 
@@ -23,7 +23,7 @@ class ImageView
         @insertion_text.highlightbackground = 'red'
       end
     end
-    @new_name.value = @image_library.short_file_name
+    @current_name.value = @image_library.short_file_name
   end
 
   def next_image
@@ -62,7 +62,7 @@ class ImageView
     display_image.copy(image, subsample: [sample_every])
     @picture_view.image   = display_image
     @original_name.value  = @image_library.short_file_name
-    @new_name.value       = @original_name.value
+    @current_name.value       = @original_name.value
     fn = ImageFileName.new(image.file)
     if fn.matches_any?
       @insertion_text.value = fn.inserted_text

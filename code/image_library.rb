@@ -1,10 +1,9 @@
 class ImageLibrary
 
   def initialize(dir)
-    @dir = dir
-    @dir += '/' unless @dir =~ /\/$/
-    @index = -1
+    @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @files = Dir[@dir+'*'].sort_by(&:downcase)
+    @index = -1
     true
   end
 
