@@ -16,8 +16,17 @@ class PictureLibrary
     get_image(:previous)
   end
 
-  def file_name
+  def full_file_name
     @file_name
+  end
+
+  def short_file_name
+    @file_name.sub(/^.*\//,'')
+  end
+
+  def inserted_text
+    file_name = ImageFileName.new(@file_name)
+    file_name.inserted_text
   end
 
   def change_name(new_name)
@@ -34,11 +43,13 @@ class PictureLibrary
 
   def get_image(retriever)
     image = TkPhotoImage.new
-    next_file_name = send(retriever)
-    if next_file_name =~ /.[jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF]$/
-      image.file = next_file_name
+    full_file_name = send(retriever)
+    if File.directory?(full_file_name)
+      image.file = Dir.pwd+'/images/folder.jpg'
+    elsif full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
+      image.file = full_file_name
     else
-      image.file = './code/picture.jpg'
+      image.file = Dir.pwd+'/images/no_renderer.jpg'
     end
     image
   end

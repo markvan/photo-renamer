@@ -5,7 +5,7 @@ class PictureView
   TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
 
   def initialize(dir, original_name, insertion_text, new_name)
-    @dir = dir
+    dir =~ /\/$/ ? @dir = dir : @dir = dir + '/'
     @original_name = original_name
     @insertion_text = insertion_text
     @new_name = new_name
@@ -34,7 +34,7 @@ class PictureView
   private
 
   def new_name(insert_str)
-    file_name = ImageFileName.new(@original_name)
+    file_name = ImageFileName.new(@original_name.value)
     m = file_name.match(LENOVO_PATTERN)
     if m
       @new_name.value = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
@@ -51,19 +51,13 @@ class PictureView
   end
 
   def set(image)
-    sample_every = sampling([600,600], image.width, image.height)
+    sample_every  = sampling([600,600], image.width, image.height)
     display_image = TkPhotoImage.new
     display_image.copy(image, subsample: [sample_every])
-    @picture_view.image = display_image
-    @original_name.value = @picture_library.file_name.sub(/.*\//,'')
-    @new_name.value = @original_name.value
-    file_name = ImageFileName.new(@dir+@original_name.value)
-    @insertion_text.value = file_name.inserted_text
-  end
-
-  def set_insertion_text
-    @insertion_text.value = ''
-
+    @picture_view.image   = display_image
+    @original_name.value  = @picture_library.short_file_name
+    @new_name.value       = @original_name.value
+    @insertion_text.value = @picture_library.inserted_text
   end
 
   def sampling(viewport, im_height, im_width)

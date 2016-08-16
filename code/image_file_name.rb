@@ -1,15 +1,15 @@
 class ImageFileName
 
-  attr_reader :full_file_name, :directory, :short_file_name
+  attr_reader :short_file_name
 
   LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
 
   TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
 
-  def initialize(full_name)
-    @full_file_name = full_name
-    @directory = full_name.sub(/\/[^\/]*$/, '/')
-    @short_file_name = full_name.sub(/\/.*\//, '')
+  def initialize(name)
+    puts name
+    @short_file_name = name
+    @short_file_name = name.sub(/^\/.*\//, '') unless (name =~ /^\//) == 0
   end
 
   def inserted_text
@@ -19,11 +19,11 @@ class ImageFileName
     ret
   end
 
-  private
-
   def match(pattern)
     @short_file_name.match(pattern)
   end
+
+  private
 
   def matches_lenovo?
     return false if match(TRANSFORMED_PATTERN)
