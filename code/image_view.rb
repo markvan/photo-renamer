@@ -4,22 +4,21 @@ class ImageView
 
   TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
 
-  def initialize(dir, original_name_widget, insertion_text_widget, new_name_widget)
+  def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @image_library = ImageLibrary.new(@dir)
     @original_name = original_name_widget
     @insertion_text = insertion_text_widget
-    @current_name = new_name_widget
+    @current_name = current_name_widget
     @picture_view = TkLabel.new($root)
     set(@image_library.next_image)
-    @original_name.state = 'readonly'
-    @current_name.state = 'readonly'
+    lock_fields
   end
 
   def set_file_name_using_insert_str(insert_str)
-    new_short_name = potential_new_name(insert_str)
-    if new_short_name
-      if @image_library.change_name(new_short_name)
+    new_short_fn = potential_new_name(insert_str)
+    if new_short_fn
+      if @image_library.change_name(new_short_fn)
         @insertion_text.highlightbackground = 'green'
       else
         @insertion_text.highlightbackground = 'red'
@@ -65,10 +64,10 @@ class ImageView
     display_image = TkPhotoImage.new
     display_image.copy(image, subsample: [sample_every])
     @picture_view.image   = display_image
-    @original_name.state = 'normal'
+    unlock_fields
     @original_name.value  = @image_library.short_file_name
-    @original_name.state = 'readonly'
     @current_name.value       = @original_name.value
+    lock_fields
     fn = ImageFileName.new(image.file)
     if fn.matches_any?
       @insertion_text.value = fn.inserted_text
@@ -78,6 +77,18 @@ class ImageView
       @insertion_text.background = 'gray'
     end
     @insertion_text.highlightbackground = 'white'
+  end
+
+  def unlock_fields
+    @original_name.state = 'normal'
+    @current_name.state = 'normal'
+  end
+
+  def lock_fields
+    @original_name.state = 'readonly'
+    @original_name.borderwidth = 0
+    @current_name.state = 'readonly'
+    @current_name.borderwidth = 0
   end
 
   def sampling(viewport, im_height, im_width)
