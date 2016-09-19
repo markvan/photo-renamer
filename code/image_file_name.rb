@@ -11,6 +11,14 @@ class ImageFileName
                             (?<second>\d\d)
                             (?<type>\..*)$/x ,
 
+    :SCREEN_SHOT_PATTERN => /^Screen[ ]Shot[ ](?<year>\d\d\d\d)-
+                            (?<month>\d\d)-
+                            (?<day>\d\d)[ ]at[ ]
+                            (?<hour>\d\d).
+                            (?<minute>\d\d).
+                            (?<second>\d\d)
+                            (?<type>\..*)$/x ,
+
     :TRANSFORMED_PATTERN => /^(?<year>\d\d\d\d)\.
                             (?<month>\d\d)\.
                             (?<day>\d\d)__
