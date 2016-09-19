@@ -8,7 +8,7 @@ class ImageFileName
 
   def initialize(name)
     name.strip!
-    name.sub(/^\/.*\//, '') if (name =~ /^\//) == 0
+    name.sub!(/^\/.*\//, '') if (name =~ /^\//) == 0
     @short_file_name = name
   end
 

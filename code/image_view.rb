@@ -16,9 +16,9 @@ class ImageView
   end
 
   def set_file_name_using_insert_str(insert_str)
-    new_short_fn = potential_new_filename(insert_str)
-    if new_short_fn
-      if @image_library.change_name(new_short_fn)
+    potential_new_fn = potential_new_filename(insert_str)
+    if potential_new_fn
+      if @image_library.change_name(potential_new_fn)
         @insertion_text.highlightbackground = 'green'
       else
         @insertion_text.highlightbackground = 'red'
