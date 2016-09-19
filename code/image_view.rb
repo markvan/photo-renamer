@@ -1,9 +1,5 @@
 class ImageView
 
-  LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
-
-  TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)([\w ]+)(\..*)$/
-
   def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @image_library = ImageLibrary.new(@dir)
@@ -11,7 +7,7 @@ class ImageView
     @insertion_text = insertion_text_widget
     @current_name = current_name_widget
     @picture_view = TkLabel.new($root)
-    set(@image_library.next_image)
+    set_image(@image_library.next_image)
     lock_fields
   end
 
@@ -20,21 +16,22 @@ class ImageView
     if potential_new_fn
       if @image_library.change_name(potential_new_fn)
         @insertion_text.highlightbackground = 'green'
+        @current_name.state = 'normal'
+        @current_name.value = @image_library.short_file_name
+        @current_name.state = 'readonly'
       else
         @insertion_text.highlightbackground = 'red'
       end
     end
-    @current_name.state = 'normal'
-    @current_name.value = @image_library.short_file_name
-    @current_name.state = 'readonly'
+
   end
 
   def next_image
-    set(@image_library.next_image)
+    set_image(@image_library.next_image)
   end
 
   def previous_image
-    set(@image_library.previous_image)
+    set_image(@image_library.previous_image)
   end
 
   def tk_lable
@@ -47,15 +44,15 @@ class ImageView
     ImageFileName.new(@original_name.value).potential_new_filename(insert_str)
   end
 
-  def set(image)
-    @picture_view.image   = sample(image)
+  def set_image(image)
+    @picture_view.image  = sample(image)
     unlock_fields
-    @original_name.value  = @image_library.short_file_name
-    @current_name.value       = @original_name.value
+    @original_name.value = @image_library.short_file_name
+    @current_name.value  = @original_name.value
     lock_fields
-    fn = ImageFileName.new(image.file)
-    if fn.matches_any?
-      @insertion_text.value = fn.inserted_text
+    original_fn = ImageFileName.new(image.file)
+    if original_fn.matches_any?
+      @insertion_text.value = original_fn.inserted_text
       @insertion_text.background = 'white'
     else
       @insertion_text.value = ''
