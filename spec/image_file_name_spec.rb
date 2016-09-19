@@ -20,9 +20,7 @@ describe ImageFileName do
       expect(image_library.next_image.file).to eq full_file_name
     end
 
-    it "should recognise a lenovo file name" do
-      expect(lenovo_file_name.matches_lenovo?).to be_truthy
-    end
+
 
     it "should not be recognised as transformed" do
       expect(lenovo_file_name.matches_transformed?).to be false
