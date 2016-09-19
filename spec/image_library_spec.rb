@@ -32,13 +32,13 @@ describe ImageLibrary do
   end
 
   it "should rename a file" do
-    expect(image_library.next_image.file).to eq full_file_name_1+'a'
-    expect(image_library.change_name(full_file_name_1)).to be false
+    expect(image_library.next_image.file).to eq full_file_name_1
+    expect(image_library.change_name(short_file_name_1)).to be false
   end
 
   it "should not rename an existing file" do
     expect(image_library.next_image.file).to eq full_file_name_1
-    expect(image_library.change_name(full_file_name_1)).to be true
+    expect(image_library.change_name(short_file_name_1)).to be true
   end
 
   it "should not rename a file with an existing file name in the directory" do

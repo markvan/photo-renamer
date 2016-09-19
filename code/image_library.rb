@@ -29,14 +29,16 @@ class ImageLibrary
   end
 
   def change_name(potential_short_name)
+    potential_short_name.strip!
+    return false if potential_short_name.empty?
     full_old_name = @files[@index]
     full_new_name = @dir+potential_short_name
-    return false if File.exist?(full_new_name) || full_old_name == full_new_name
+    return false if full_old_name == full_new_name || File.exist?(full_new_name)
 
     File.rename(full_old_name, full_new_name)
 
     @files[@index] = full_new_name
-    puts "'#{full_old_name}' renamed '#{full_new_name}'"
+    # puts "'#{full_old_name}' renamed '#{full_new_name}'"
     true
   end
 
