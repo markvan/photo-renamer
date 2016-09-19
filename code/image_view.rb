@@ -16,7 +16,7 @@ class ImageView
   end
 
   def set_file_name_using_insert_str(insert_str)
-    new_short_fn = potential_new_name(insert_str)
+    new_short_fn = potential_new_filename(insert_str)
     if new_short_fn
       if @image_library.change_name(new_short_fn)
         @insertion_text.highlightbackground = 'green'
@@ -43,20 +43,8 @@ class ImageView
 
   private
 
-  def potential_new_name(insert_str)
-    file_name = ImageFileName.new(@original_name.value)
-    m = file_name.match(LENOVO_PATTERN)
-    if m
-      potential_new_fn = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
-    else
-      n =file_name.match(TRANSFORMED_PATTERN)
-      if n
-        potential_new_fn = "#{n[1]}.#{n[2]}.#{n[3]}__#{n[4]}.#{n[5]}  #{insert_str} #{n[7]}"
-      else
-        potential_new_fn = @original_name.value
-      end
-    end
-    potential_new_fn.strip
+  def potential_new_filename(insert_str)
+    ImageFileName.new(@original_name.value).potential_new_filename(insert_str)
   end
 
   def set(image)

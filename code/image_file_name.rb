@@ -7,8 +7,9 @@ class ImageFileName
   TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)(.*)(\..*)$/
 
   def initialize(name)
+    name.strip!
+    name.sub(/^\/.*\//, '') if (name =~ /^\//) == 0
     @short_file_name = name
-    @short_file_name = name.sub(/^\/.*\//, '') if (name =~ /^\//) == 0
   end
 
   def inserted_text
@@ -38,5 +39,16 @@ class ImageFileName
 
   def matches_none?
     ! matches_any?
+  end
+
+  def potential_new_filename(insert_str)
+    if m = matches_lenovo?
+      potential_new_fn = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
+    elsif m = matches_transformed?
+      potential_new_fn = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[7]}"
+    else
+      potential_new_fn = @short_file_name
+    end
+    potential_new_fn
   end
 end
