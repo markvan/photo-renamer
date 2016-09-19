@@ -48,10 +48,7 @@ class ImageView
   end
 
   def set(image)
-    sample_every  = sampling([600,600], image.width, image.height)
-    display_image = TkPhotoImage.new
-    display_image.copy(image, subsample: [sample_every])
-    @picture_view.image   = display_image
+    @picture_view.image   = sample(image)
     unlock_fields
     @original_name.value  = @image_library.short_file_name
     @current_name.value       = @original_name.value
@@ -67,6 +64,19 @@ class ImageView
     @insertion_text.highlightbackground = 'white'
   end
 
+  def sample(image)
+    sample_every  = sampling([600,600], image.width, image.height)
+    TkPhotoImage.new.copy(image, subsample: [sample_every])
+  end
+
+  def sampling(viewport, im_height, im_width)
+    x = im_height.to_f/viewport[0]
+    y = im_width.to_f/viewport[1]
+    every = [x, y].max
+    floor = every.floor
+    every.modulo(1) > 0 ? floor + 1 : floor
+  end
+
   def unlock_fields
     @original_name.state = 'normal'
     @current_name.state = 'normal'
@@ -79,11 +89,4 @@ class ImageView
     @current_name.borderwidth = 0
   end
 
-  def sampling(viewport, im_height, im_width)
-    x = im_height.to_f/viewport[0]
-    y = im_width.to_f/viewport[1]
-    every = [x, y].max
-    floor = every.floor
-    every.modulo(1) > 0 ? floor + 1 : floor
-  end
 end
