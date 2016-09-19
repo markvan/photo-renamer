@@ -50,7 +50,7 @@ class ImageLibrary
     elsif @full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
       image.file = @full_file_name
     else
-      image.file = Dir.pwd+'/images/no_renderer.jpg'
+      image.file = '/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg'
     end
     image
   end
