@@ -2,9 +2,21 @@ class ImageFileName
 
   attr_reader :short_file_name
 
-  LENOVO_PATTERN = /^IMG_(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)\d\d(\..*)$/
+  LENOVO_PATTERN  = /^IMG_(?<year>\d\d\d\d)
+                          (?<month>\d\d)
+                          (?<day>\d\d)_
+                          (?<hour>\d\d)
+                          (?<minute>\d\d)
+                          (?<second>\d\d)
+                          (?<type>\..*)$/x
 
-  TRANSFORMED_PATTERN = /^(\d\d\d\d)\.(\d\d)\.(\d\d)__(\d\d)\.(\d\d)(.*)(\..*)$/
+  TRANSFORMED_PATTERN = /^(?<year>\d\d\d\d)\.
+                          (?<month>\d\d)\.
+                          (?<day>\d\d)__
+                          (?<hour>\d\d)\.
+                          (?<minute>\d\d)
+                          (?<description>.*)
+                          (?<type>\..*)$/x
 
   def initialize(name)
     name.strip!
@@ -42,10 +54,8 @@ class ImageFileName
   end
 
   def potential_new_filename(insert_str)
-    if m = matches_lenovo?
-      potential_new_fn = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[6]}"
-    elsif m = matches_transformed?
-      potential_new_fn = "#{m[1]}.#{m[2]}.#{m[3]}__#{m[4]}.#{m[5]}  #{insert_str} #{m[7]}"
+    if m = matches_any?
+      potential_new_fn = "#{m[:year]}.#{m[:month]}.#{m[:day]}__#{m[:hour]}.#{m[:minute]}  #{insert_str} #{m[:type]}"
     else
       potential_new_fn = @short_file_name
     end
