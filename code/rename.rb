@@ -13,11 +13,14 @@ class Layout
   end
 
   def initialize(width, height)
-    @viewport=[width, height]
-    @root = TkRoot.new
-    @root.title = 'haz renamez'
-    @root.geometry("#{@viewport[0]+20}x#{@viewport[1]+20}")
+    setup_root(width, height)
     layout
+  end
+
+  def setup_root(width, height)
+    @root = TkRoot.new
+    @root.geometry("#{width+20}x#{height+20}")
+    @root.title = 'haz renamez'
   end
 
   def layout
