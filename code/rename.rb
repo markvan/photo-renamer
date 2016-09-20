@@ -4,7 +4,7 @@ base = '/Users/mark/RubymineProjects/photo-renamer/'
 require 'tk'
 require 'tkextlib/tkimg'
 require base+'./code/image'
-require base+'./code/image_view'
+require base+'./code/view'
 require base+'./code/image_file_name'
 
 def ppp(*args)
@@ -21,40 +21,35 @@ class Layout
     @root = TkRoot.new
     @root.title = '/Users/mark/Pictures/art'
     @root.geometry("#{@viewport[0]+20}x#{@viewport[1]+20}")
-
-    @dir_button  = TkButton.new(@root) { text 'dir';  command proc { Layout.choose_dir } }
-    @test_button  = TkButton.new(@root) { text 'test';  command proc { Layout.test_dir } }
-    @prev_button = TkButton.new(@root) { text 'prev'; command proc { Layout.image_view.previous_image } }
-    @next_button = TkButton.new(@root) { text 'next'; command proc { Layout.image_view.next_image } }
-
-    entry_width = 70
-    label_width = 14
-    @original_name_label  = TkLabel.new(@root) { width label_width; text '    Original'; justify 'right'}
-    @@original_name       = TkEntry.new(@root) { width entry_width }
-    @insertion_text_label = TkLabel.new(@root) { width label_width;  text 'Description' }
-    @@insertion_text      = TkEntry.new(@root) { width entry_width; validate 'key' }
-    @current_name_label   = TkLabel.new(@root) { width label_width;   text '    Current' }
-    @@current_name        = TkEntry.new(@root) { width entry_width }
-
     layout
   end
 
   def layout
-    @dir_button.grid('row' => 0, 'column' => 0, 'sticky' => 'w')
-    @test_button.grid('row' => 1, 'column' => 0, 'sticky' => 'w')
+    entry_width = 70
+    label_width = 14
+    anon_grid_cell( TkButton.new(@root) { text 'dir';  command proc { Layout.choose_dir } },                0, 0,'w')
+    anon_grid_cell( TkButton.new(@root) { text 'test';  command proc { Layout.test_dir } },                 1, 0,'w')
+    anon_grid_cell( TkButton.new(@root) { text 'prev'; command proc { Layout.image_view.previous_image } }, 0, 1,'e')
+    anon_grid_cell( TkButton.new(@root) { text 'next'; command proc { Layout.image_view.next_image } },     0, 2,'w')
 
-    @prev_button.grid('row' => 0, 'column' => 1, 'sticky' => 'e')
-    @next_button.grid('row' => 0, 'column' => 2, 'sticky' => 'w')
+    anon_grid_cell( TkLabel.new(@root)  { width label_width; text '    Original'; justify 'right'},         1, 1,'e')
+    anon_grid_cell( TkLabel.new(@root)  { width label_width;  text 'Description' },                         2, 1,'e')
+    anon_grid_cell( TkLabel.new(@root)  { width label_width;   text '    Current' },                        3, 1,'e')
 
-    @original_name_label.grid('row' => 1, 'column' => 1, 'sticky' => 'e')
-    @@original_name.grid('row' => 1, 'column' => 2, 'sticky' => 'w')
+    @@original_name       = TkEntry.new(@root) { width entry_width }
+    grid_cell(@@original_name, 1, 2,'w')
+    @@insertion_text      = TkEntry.new(@root) { width entry_width; validate 'key' }
+    grid_cell(@@insertion_text, 2, 2,'w')
+    @@current_name        = TkEntry.new(@root) { width entry_width }
+    grid_cell(@@current_name, 3, 2, 'w')
+  end
 
-    @insertion_text_label.grid('row' => 2, 'column' => 1, 'sticky' => 'e')
-    @@insertion_text.grid('row' => 2, 'column' => 2, 'sticky' => 'w')
+  def anon_grid_cell(tk_widget, row, column, sticky)
+    tk_widget.grid('row' => row, 'column' => column,'sticky' => sticky)
+  end
 
-    @current_name_label.grid('row' => 3, 'column' => 1, 'sticky' => 'e')
-    @@current_name.grid('row' => 3, 'column' => 2, 'sticky' => 'w')
-
+  def grid_cell(elem, row, column, sticky)
+    elem.grid('row' => row, 'column' => column,'sticky' => sticky)
   end
 
   def self.choose_dir
@@ -76,7 +71,7 @@ class Layout
   end
 
   def self.setup_dir(dir)
-    @@image_view = ImageView.new(dir, @@original_name, @@insertion_text, @@current_name)
+    @@image_view = View.new(dir, @@original_name, @@insertion_text, @@current_name)
     @@insertion_text.validatecommand([proc{|p| Layout.image_view.set_file_name_using_insert_str(p)}, '%P'])
     @@image_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 3, 'pady' => 25)
   end

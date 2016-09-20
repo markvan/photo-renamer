@@ -1,4 +1,4 @@
-class ImageView
+class View
 
   def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
@@ -7,7 +7,7 @@ class ImageView
     @insertion_text = insertion_text_widget
     @current_name = current_name_widget
     @picture_view = TkLabel.new($root)
-    set_image(@image_library.next_image)
+    set_image_and_text(@image_library.next_image)
     lock_fields
   end
 
@@ -27,11 +27,11 @@ class ImageView
   end
 
   def next_image
-    set_image(@image_library.next_image)
+    set_image_and_text(@image_library.next_image)
   end
 
   def previous_image
-    set_image(@image_library.previous_image)
+    set_image_and_text(@image_library.previous_image)
   end
 
   def tk_lable
@@ -44,7 +44,7 @@ class ImageView
     ImageFileName.new(@original_name.value).potential_new_filename(insert_str)
   end
 
-  def set_image(image)
+  def set_image_and_text(image)
     @picture_view.image  = sample(image)
     unlock_fields
     @original_name.value = @image_library.short_file_name

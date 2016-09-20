@@ -44,7 +44,7 @@ class Image
   private
 
   def get_image(retriever)
-    @full_file_name = send(retriever)
+    send(retriever)
     image = TkPhotoImage.new
     if File.directory?(@full_file_name)
       image.file = Dir.pwd+'/images/folder.jpg'
