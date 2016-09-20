@@ -1,10 +1,10 @@
 require './spec/support/spec_helper'
 
-describe ImageLibrary do
+describe Image do
 
   let(:dir) { Dir.pwd+'/spec/image_library/' }
 
-  let(:image_library) { ImageLibrary.new(dir) }
+  let(:image_library) { Image.new(dir) }
   let(:lenovo_file_name) { ImageFileName.new(image_library.next_image.file) }
 
   let(:short_file_name_1) { '2016.05.09__17.52  some text .jpg' }
@@ -23,7 +23,7 @@ describe ImageLibrary do
   let(:full_file_name_5_image) { Dir.pwd+short_file_name_5_image }
 
   before do
-    File.rename(ImageLibrary.new(dir).next_image.file, full_file_name_1)
+    File.rename(Image.new(dir).next_image.file, full_file_name_1)
     image_library
   end
 

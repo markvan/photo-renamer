@@ -1,4 +1,4 @@
-class ImageLibrary
+class Image
 
   def initialize(dir)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )

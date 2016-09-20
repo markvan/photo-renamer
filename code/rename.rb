@@ -3,7 +3,7 @@ require 'fileutils'
 base = '/Users/mark/RubymineProjects/photo-renamer/'
 require 'tk'
 require 'tkextlib/tkimg'
-require base+'./code/image_library'
+require base+'./code/image'
 require base+'./code/image_view'
 require base+'./code/image_file_name'
 

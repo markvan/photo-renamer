@@ -2,7 +2,7 @@ class ImageView
 
   def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
-    @image_library = ImageLibrary.new(@dir)
+    @image_library = Image.new(@dir)
     @original_name = original_name_widget
     @insertion_text = insertion_text_widget
     @current_name = current_name_widget
