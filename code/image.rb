@@ -4,15 +4,14 @@ class Image
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @files = Dir[@dir+'*'].sort_by(&:downcase)
     @index = -1
-    true
   end
 
-  def next_image
-    get_image(:next)
+  def next
+    get_image(:next_image)
   end
 
-  def previous_image
-    get_image(:previous)
+  def previous
+    get_image(:previous_image)
   end
 
   def full_file_name
@@ -56,12 +55,12 @@ class Image
     image
   end
 
-  def next
+  def next_image
     @index == @files.count - 1 ? @index = 0 : @index += 1
     @full_file_name = @files[@index]
   end
 
-  def previous
+  def previous_image
     @index == 0 ? @index = @files.count - 1 : @index -= 1
     @full_file_name = @files[@index]
   end

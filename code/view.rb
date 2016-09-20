@@ -2,23 +2,23 @@ class View
 
   def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
-    @image_library = Image.new(@dir)
-    @original_name = original_name_widget
+    @image = Image.new(@dir)
+    @original_fn = original_name_widget
     @insertion_text = insertion_text_widget
-    @current_name = current_name_widget
-    @picture_view = TkLabel.new($root)
-    set_image_and_text(@image_library.next_image)
+    @current_fn = current_name_widget
+    @image_view = TkLabel.new($root)
+    set_image_and_text(@image.next)
     lock_fields
   end
 
   def set_file_name_using_insert_str(insert_str)
     potential_new_fn = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
     if potential_new_fn
-      if @image_library.change_name(potential_new_fn)
+      if @image.change_name(potential_new_fn)
         @insertion_text.highlightbackground = 'green'
-        @current_name.state = 'normal'
-        @current_name.value = @image_library.short_file_name
-        @current_name.state = 'readonly'
+        @current_fn.state = 'normal'
+        @current_fn.value = @image.short_file_name
+        @current_fn.state = 'readonly'
       else
         @insertion_text.highlightbackground = 'red'
       end
@@ -27,28 +27,28 @@ class View
   end
 
   def next_image
-    set_image_and_text(@image_library.next_image)
+    set_image_and_text(@image.next)
   end
 
   def previous_image
-    set_image_and_text(@image_library.previous_image)
+    set_image_and_text(@image.previous)
   end
 
   def tk_lable
-    @picture_view
+    @image_view
   end
 
   private
 
   def potential_new_filename(insert_str)
-    ImageFileName.new(@original_name.value).potential_new_filename(insert_str)
+    ImageFileName.new(@original_fn.value).potential_new_filename(insert_str)
   end
 
   def set_image_and_text(image)
-    @picture_view.image  = sample(image)
+    @image_view.image  = sample(image)
     unlock_fields
-    @original_name.value = @image_library.short_file_name
-    @current_name.value  = @original_name.value
+    @original_fn.value = @image.short_file_name
+    @current_fn.value  = @original_fn.value
     lock_fields
     original_fn = ImageFileName.new(image.file)
     if original_fn.matches_any?
@@ -75,15 +75,15 @@ class View
   end
 
   def unlock_fields
-    @original_name.state = 'normal'
-    @current_name.state = 'normal'
+    @original_fn.state = 'normal'
+    @current_fn.state = 'normal'
   end
 
   def lock_fields
-    @original_name.state = 'readonly'
-    @original_name.borderwidth = 0
-    @current_name.state = 'readonly'
-    @current_name.borderwidth = 0
+    @original_fn.state = 'readonly'
+    @original_fn.borderwidth = 0
+    @current_fn.state = 'readonly'
+    @current_fn.borderwidth = 0
   end
 
 end
