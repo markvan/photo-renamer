@@ -19,10 +19,10 @@ class ImageFileName
                             (?<second>\d\d)
                             (?<type>\..*)$/x ,
 
-    :TRANSFORMED_PATTERN => /^(?<year>\d\d\d\d)\.
-                            (?<month>\d\d)\.
-                            (?<day>\d\d)__
-                            (?<hour>\d\d)\.
+    :TRANSFORMED_PATTERN => /^(?<year>\d\d\d\d).
+                            (?<month>\d\d).
+                            (?<day>\d\d)[ _-]+
+                            (?<hour>\d\d).
                             (?<minute>\d\d)
                             (?<description>.*)
                             (?<type>\..*)$/x
@@ -30,7 +30,7 @@ class ImageFileName
 
   def initialize(name)
     name.strip!
-    name.sub!(/^\/.*\//, '') if (name =~ /^\//) == 0
+    name.sub!(/.*\//, '') if name[0] == '/'
     @short_file_name = name
   end
 
@@ -43,7 +43,7 @@ class ImageFileName
 
   def potential_new_filename(insert_str)
     if m = matches_any?
-      "#{m[:year]}.#{m[:month]}.#{m[:day]}__#{m[:hour]}.#{m[:minute]}  #{insert_str} #{m[:type]}"
+      "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:minute]}  #{insert_str}  #{m[:type]}"
     else
       @short_file_name
     end
