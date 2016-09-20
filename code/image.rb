@@ -27,6 +27,10 @@ class Image
     ImageFileName.new(@full_file_name).inserted_text
   end
 
+  def matches_any?
+    ImageFileName.new(@full_file_name).matches_any?
+  end
+
   def change_name(potential_short_name)
     potential_short_name.strip!
     return false if potential_short_name.empty?
