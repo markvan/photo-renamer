@@ -8,7 +8,7 @@ require base+'./code/image_view'
 require base+'./code/image_file_name'
 
 def ppp(*args)
-  puts 'x'; true
+  puts 'x'; truemage libray to image
 end
 
 class Layout
