@@ -51,12 +51,11 @@ class Layout
   end
 
   def self.test_dir
-    dir = ruby_root + '/spec/image_library'
     from_dir = ruby_root + '/spec/image_setup'
-    puts Dir.glob("#{from_dir}/*")
-    FileUtils.rm_f( Dir.glob("#{dir}/*") )
-    FileUtils.cp( Dir.glob("#{from_dir}/*") , dir)
-    setup_dir(dir)
+    to_dir = ruby_root + '/spec/image_library'
+    FileUtils.rm_f( Dir.glob("#{to_dir}/*") )
+    FileUtils.cp( Dir.glob("#{from_dir}/*"), to_dir )
+    setup_dir(to_dir)
   end
 
   def self.ruby_root

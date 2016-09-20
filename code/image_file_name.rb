@@ -50,16 +50,15 @@ class ImageFileName
   end
 
   def matches_transformed?
-    match(PATTERNS[:TRANSFORMED_PATTERN])
+    matches?(PATTERNS[:TRANSFORMED_PATTERN])
   end
 
   def matches_any?
-    found = PATTERNS.reject{|name, pattern| ! match(pattern) }
-    puts found.count
-    found.count > 0 ? match(found.to_a[0][1]) : false
+    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
+    found.count > 0 ? matches?(found.to_a[0][1]) : false
   end
 
-  def match(pattern)
+  def matches?(pattern)
     @short_file_name.match(pattern)
   end
 
