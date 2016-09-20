@@ -7,10 +7,6 @@ require base+'./code/image'
 require base+'./code/view'
 require base+'./code/image_file_name'
 
-def ppp(*args)
-  puts 'x'; truemage libray to image
-end
-
 class Layout
   def self.image_view
     @@image_view
@@ -19,7 +15,7 @@ class Layout
   def initialize(width, height)
     @viewport=[width, height]
     @root = TkRoot.new
-    @root.title = '/Users/mark/Pictures/art'
+    @root.title = 'haz renamez'
     @root.geometry("#{@viewport[0]+20}x#{@viewport[1]+20}")
     layout
   end
@@ -27,29 +23,23 @@ class Layout
   def layout
     entry_width = 70
     label_width = 14
-    anon_grid_cell( TkButton.new(@root) { text 'dir';  command proc { Layout.choose_dir } },                0, 0,'w')
-    anon_grid_cell( TkButton.new(@root) { text 'test';  command proc { Layout.test_dir } },                 1, 0,'w')
-    anon_grid_cell( TkButton.new(@root) { text 'prev'; command proc { Layout.image_view.previous_image } }, 0, 1,'e')
-    anon_grid_cell( TkButton.new(@root) { text 'next'; command proc { Layout.image_view.next_image } },     0, 2,'w')
+    grid_cell( TkButton.new(@root) { text 'dir';  command proc { Layout.choose_dir } },                0, 0, 'w')
+    grid_cell( TkButton.new(@root) { text 'test'; command proc { Layout.test_dir } },                  1, 0, 'w')
+    grid_cell( TkButton.new(@root) { text 'prev'; command proc { Layout.image_view.previous_image } }, 0, 1, 'e')
+    grid_cell( TkButton.new(@root) { text 'next'; command proc { Layout.image_view.next_image } },     0, 2, 'w')
 
-    anon_grid_cell( TkLabel.new(@root)  { width label_width; text '    Original'; justify 'right'},         1, 1,'e')
-    anon_grid_cell( TkLabel.new(@root)  { width label_width;  text 'Description' },                         2, 1,'e')
-    anon_grid_cell( TkLabel.new(@root)  { width label_width;   text '    Current' },                        3, 1,'e')
+    grid_cell( TkLabel.new(@root)  { width label_width; text '    Original'; justify 'right'},         1, 1, 'e')
+    grid_cell( TkLabel.new(@root)  { width label_width; text 'Description' },                          2, 1, 'e')
+    grid_cell( TkLabel.new(@root)  { width label_width; text '    Current' },                          3, 1, 'e')
 
-    @@original_name       = TkEntry.new(@root) { width entry_width }
-    grid_cell(@@original_name, 1, 2,'w')
-    @@insertion_text      = TkEntry.new(@root) { width entry_width; validate 'key' }
-    grid_cell(@@insertion_text, 2, 2,'w')
-    @@current_name        = TkEntry.new(@root) { width entry_width }
-    grid_cell(@@current_name, 3, 2, 'w')
+    @@original_name       = grid_cell( TkEntry.new(@root) { width entry_width },                       1, 2, 'w')
+    @@insertion_text      = grid_cell( TkEntry.new(@root) { width entry_width; validate 'key' },       2, 2, 'w')
+    @@current_name        = grid_cell( TkEntry.new(@root) { width entry_width },                       3, 2, 'w')
   end
 
-  def anon_grid_cell(tk_widget, row, column, sticky)
+  def grid_cell(tk_widget, row, column, sticky)
     tk_widget.grid('row' => row, 'column' => column,'sticky' => sticky)
-  end
-
-  def grid_cell(elem, row, column, sticky)
-    elem.grid('row' => row, 'column' => column,'sticky' => sticky)
+    tk_widget
   end
 
   def self.choose_dir
