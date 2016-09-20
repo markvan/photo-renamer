@@ -24,8 +24,7 @@ class ImageLibrary
   end
 
   def inserted_text
-    file_name = ImageFileName.new(@full_file_name)
-    file_name.inserted_text
+    ImageFileName.new(@full_file_name).inserted_text
   end
 
   def change_name(potential_short_name)

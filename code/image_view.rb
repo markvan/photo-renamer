@@ -58,6 +58,14 @@ class ImageView
       @insertion_text.value = ''
       @insertion_text.background = 'gray'
     end
+=begin
+    if @image_library.matches_any?
+      @insertion_text.value = @image_library.inserted_text
+    else
+      @insertion_text.value = ''
+      @insertion_text.background = 'gray'
+    end
+=end
     @insertion_text.highlightbackground = 'white'
   end
 

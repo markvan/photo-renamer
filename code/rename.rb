@@ -43,7 +43,6 @@ class Layout
     @dir_button.grid('row' => 0, 'column' => 0, 'sticky' => 'w')
     @test_button.grid('row' => 1, 'column' => 0, 'sticky' => 'w')
 
-
     @prev_button.grid('row' => 0, 'column' => 1, 'sticky' => 'e')
     @next_button.grid('row' => 0, 'column' => 2, 'sticky' => 'w')
 
