@@ -46,11 +46,11 @@ class Image
     send(retriever)
     image = TkPhotoImage.new
     if File.directory?(@full_file_name)
-      image.file = Dir.pwd+'/images/folder.jpg'
+      image.file = __dir__ + '/../images/folder.jpg'
     elsif @full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
       image.file = @full_file_name
     else
-      image.file = '/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg'
+      image.file = __dir__ + '/../images/no_renderer.jpg'
     end
     image
   end

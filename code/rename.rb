@@ -65,7 +65,7 @@ class Layout
 
   def self.setup_dir(dir)
     @@image_view = View.new(dir, @@original_name, @@insertion_text, @@current_name)
-    @@insertion_text.validatecommand([proc{|p| Layout.image_view.set_file_name_using_insert_str(p)}, '%P'])
+    @@insertion_text.validatecommand([proc{|p| Layout.image_view.potential_filename_with_inserted_str(p)}, '%P'])
     @@image_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 3, 'pady' => 25)
   end
 end
