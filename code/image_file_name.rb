@@ -35,14 +35,12 @@ class ImageFileName
   end
 
   def inserted_text
-    ret = ''
-    m = matches_transformed?
-    ret = m[6].strip if m
-    ret
+    matches_transformed? ? m[6].strip : ''
   end
 
   def potential_new_filename(insert_str)
-    if m = matches_any?
+    m = matches_any?
+    if m
       "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:minute]}  #{insert_str}  #{m[:type]}"
     else
       @short_file_name
