@@ -45,12 +45,13 @@ class Image
   def get_image(retriever)
     send(retriever)
     image = TkPhotoImage.new
-    if File.directory?(@full_file_name)
-      image.file = __dir__ + '/../images/folder.jpg'
-    elsif @full_file_name =~ /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/
-      image.file = @full_file_name
-    else
-      image.file = __dir__ + '/../images/no_renderer.jpg'
+    case true
+      when File.directory?(@full_file_name)
+        image.file = __dir__ + '/../images/folder.jpg'
+      when !!@full_file_name.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/)
+        image.file = @full_file_name
+      else
+        image.file = __dir__ + '/../images/no_renderer.jpg'
     end
     image
   end
