@@ -35,7 +35,7 @@ class ImageFileName
   end
 
   def inserted_text
-    matches_transformed? ? m[6].strip : ''
+    matches_transformed? ? matches_transformed?[:description].strip : ''
   end
 
   def potential_new_filename(insert_str)
