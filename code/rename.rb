@@ -1,20 +1,43 @@
 require 'fileutils'
 
-base = '/Users/mark/RubymineProjects/photo-renamer/'
+def ruby_root
+  __dir__.gsub(/\/code/, '')
+end
+
 require 'tk'
 require 'tkextlib/tkimg'
-require base+'./code/image'
-require base+'./code/view'
-require base+'./code/image_file_name'
+require ruby_root+'/code/image'
+require ruby_root+'/code/view'
+require ruby_root+'/code/image_file_name'
 
 class Layout
-  def image_view
-    @image_view
-  end
 
   def initialize(width, height)
     setup_root(width, height)
     layout
+  end
+
+  def choose_dir
+    dir = Tk.chooseDirectory
+    setup_dir(dir)
+  end
+
+  def test_dir
+    from_dir = ruby_root + '/spec/image_setup'
+    to_dir = ruby_root + '/spec/image_library'
+    FileUtils.rm_f( Dir.glob("#{to_dir}/*") )
+    FileUtils.cp( Dir.glob("#{from_dir}/*"), to_dir )
+    setup_dir(to_dir)
+  end
+
+  def image_view
+    @image_view
+  end
+
+  private
+
+  def self.instance
+    ObjectSpace.each_object(Layout).first
   end
 
   def setup_root(width, height)
@@ -44,33 +67,13 @@ class Layout
     tk_widget.grid('row' => row, 'column' => column,'sticky' => sticky)
     tk_widget
   end
-  
-  def self.instance
-    ObjectSpace.each_object(Layout).first
-  end
-
-  def choose_dir
-    dir = Tk.chooseDirectory
-    setup_dir(dir)
-  end
-
-  def test_dir
-    from_dir = ruby_root + '/spec/image_setup'
-    to_dir = ruby_root + '/spec/image_library'
-    FileUtils.rm_f( Dir.glob("#{to_dir}/*") )
-    FileUtils.cp( Dir.glob("#{from_dir}/*"), to_dir )
-    setup_dir(to_dir)
-  end
-
-  def ruby_root
-    __dir__.gsub(/\/code/, '')
-  end
 
   def setup_dir(dir)
     @image_view = View.new(dir, @original_name, @insertion_text, @current_name)
     @insertion_text.validatecommand([proc{|p| image_view.potential_filename_with_inserted_str(p)}, '%P'])
     @image_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 3, 'pady' => 25)
   end
+
 end
 
 Layout.new(700, 740)
