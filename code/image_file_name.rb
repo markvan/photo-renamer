@@ -10,7 +10,16 @@ class ImageFileName
                             (?<minute>\d\d)
                             (?<second>\d\d)
                             (?<description>)
-                            (?<type>\..*)$/x ,
+                            (?<type>\.jpg)$/x ,
+
+    :SAMSUNG_ACE_PATTERN  => /(?<year>\d\d\d\d)-
+                            (?<month>\d\d)-
+                            (?<day>\d\d)[ ]
+                            (?<hour>\d\d)\.
+                            (?<minute>\d\d)\.
+                            (?<second>\d\d)
+                            (?<description>)
+                            (?<type>\.jpg)$/x ,
 
     :SCREEN_SHOT_PATTERN => /^Screen[ ]Shot[ ](?<year>\d\d\d\d)-
                             (?<month>\d\d)-
@@ -19,7 +28,7 @@ class ImageFileName
                             (?<minute>\d\d).
                             (?<second>\d\d)
                             (?<description>)
-                            (?<type>\..*)$/x
+                            (?<type>\.png)$/x
   }
 
   TRANSFORMED_PATTERN =  /^(?<year>\d\d\d\d)-
@@ -76,7 +85,7 @@ class ImageFileName
   end
 
   def matches_transformed?
-    matches?(TRANSFORMED_PATTERN) || false
+    (! matches_samsung_ace? && matches?(TRANSFORMED_PATTERN)) || false
   end
 
   def matches_any_original?
@@ -86,6 +95,10 @@ class ImageFileName
 
   def matches_lenovo?
     matches?(PATTERNS[:LENOVO_PATTERN]) || false
+  end
+
+  def matches_samsung_ace?
+    matches?(PATTERNS[:SAMSUNG_ACE_PATTERN]) || false
   end
 
   def matches_screenshot?

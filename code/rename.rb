@@ -43,7 +43,7 @@ class Layout
   def setup_root(width, height)
     @root = TkRoot.new
     @root.geometry("#{width+20}x#{height+20}")
-    @root.title = 'haz renamez'
+    @root.title = 'haz renamz'
   end
 
   def layout

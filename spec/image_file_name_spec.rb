@@ -32,6 +32,12 @@ describe ImageFileName do
       expect(make_fn('Screen Shot 2016-09-20 at 00.04.40.png').matches_transformed?).to eq false
     end
 
+    it "should match samsung ace original formats" do
+      expect(make_fn('2005-05-09 23.17.59.jpg').matches_samsung_ace?).to be_truthy
+      expect(make_fn('2005-05-09 23.17.59.jpg').matches_any_original?).to be_truthy
+      expect(make_fn('2005-05-09 23.17.59.jpg').matches_transformed?).to eq false
+    end
+
     it "should match transformed" do
       expect(make_fn('2016-07-25 10.33 .jpg').matches_transformed?).to be_truthy
       expect(make_fn('2016-07-25 10.33 xx .jpg').matches_transformed?).to be_truthy
