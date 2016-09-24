@@ -9,6 +9,7 @@ class ImageFileName
                             (?<hour>\d\d)
                             (?<minute>\d\d)
                             (?<second>\d\d)
+                            (?<description>)
                             (?<type>\..*)$/x ,
 
     :SCREEN_SHOT_PATTERN => /^Screen[ ]Shot[ ](?<year>\d\d\d\d)-
@@ -17,6 +18,7 @@ class ImageFileName
                             (?<hour>\d\d).
                             (?<minute>\d\d).
                             (?<second>\d\d)
+                            (?<description>)
                             (?<type>\..*)$/x
   }
 
@@ -40,10 +42,13 @@ class ImageFileName
 
   def potential_new_filename(insert_str)
     m = matches_any?
+    m_orig = matches_any_original?
     case true
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
-      when m && insert_str.length == 0
+      when m && insert_str.length == 0 && m[:description].length > 0
+        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{m[:type]}"
+      when m && insert_str.length == 0 && m[:description].length == 0
         @short_file_name
       else
         match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
