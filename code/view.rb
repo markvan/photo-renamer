@@ -10,8 +10,9 @@ class View
     set_image_and_text(@image.next)
   end
 
-  def change_fn_and_text_using_insert_str(insert_str)
-    new_name = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
+  def validate_insert(insert_str)
+    puts "validate_insert for '#{@original_filename.value}' using '#{insert_str}' "
+    new_name = potential_new_filename(insert_str.strip)
     case true
       when new_name == @current_filename.value
         nil
@@ -23,6 +24,7 @@ class View
       else
         @insertion_text.highlightbackground = 'red'
     end
+    @insertion_text.value    = insert_str
   end
 
   def next_image

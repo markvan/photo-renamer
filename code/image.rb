@@ -45,7 +45,7 @@ class Image
     image = TkPhotoImage.new
     case true
       when File.directory?(@full_file_name)
-        image.file = __dir__ + '/../images/folder.jpg'
+        image.file = ruby_root + '/images/folder.jpg'
       when !!@full_file_name.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/)
         image.file = @full_file_name
       else
