@@ -22,11 +22,11 @@ class ImageFileName
                             (?<type>\..*)$/x
   }
 
-  TRANSFORMED_PATTERN =  /^(?<year>\d\d\d\d).
-                              (?<month>\d\d).
-                              (?<day>\d\d)[ ]+
-                              (?<hour>\d\d).
-                              (?<minute>\d\d)[ ]+
+  TRANSFORMED_PATTERN =  /^(?<year>\d\d\d\d)-
+                              (?<month>\d\d)-
+                              (?<day>\d\d)[ ]
+                              (?<hour>\d\d)\.
+                              (?<minute>\d\d)[ ]*
                               (?<description>.*)[ ]*
                               (?<type>\..*)$/x
 
@@ -40,17 +40,36 @@ class ImageFileName
     matches_transformed? ? matches_transformed?[:description].strip : ''
   end
 
+  def reformat_with_space
+    match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
+    match_data[:base_name].strip+' '+match_data[:type]
+  end
+
   def potential_new_filename(insert_str)
     m = matches_any?
+    t = matches_transformed?
     case true
+      # got a string to insert, make the transformed fn regardless of original fn format
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
+
+      # transformed original fn has a description, want rid of it by making insert field empty
       when m && insert_str.length == 0 && m[:description].length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{m[:type]}"
+
+      when t && t[:description].length == 0 && insert_str.length == 0
+        "#{t[:year]}-#{t[:month]}-#{t[:day]} #{t[:hour]}.#{t[:minute]} #{t[:type]}"
+
+
+      # original fn of any matched type has NO description, just space the extension away from fn body
       when m && insert_str.length == 0 && m[:description].length == 0
         @short_file_name
+
+      # original fn is not matched, has an extension, just space the extension away
       when match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
         match_data[:base_name].strip+' '+match_data[:type]
+
+      # original fn does not havve an extension
       else
         @short_file_name
     end

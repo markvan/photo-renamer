@@ -69,11 +69,10 @@ describe ImageFileName do
     end
 
     it "should show transformed filenames from transformed file names" do
-      expect(make_fn('2016.04.03 17.27.jpg').potential_new_filename('')).to eq '2016.04.03 17.27 .jpg'
-      expect(make_fn('2016.04.03 17.27 .jpg').potential_new_filename('')).to eq '2016.04.03 17.27 .jpg'
-      expect(make_fn('2016.04.03 17.27  .jpg').potential_new_filename('')).to eq '2016.04.03 17.27 .jpg'
+      expect(make_fn('2016-04-03 17.27.jpg').potential_new_filename('')).to eq '2016-04-03 17.27 .jpg'
+      expect(make_fn('2016-04-03 17.27 .jpg').potential_new_filename('')).to eq '2016-04-03 17.27 .jpg'
+      expect(make_fn('2016-04-03 17.27  .jpg').potential_new_filename('')).to eq '2016-04-03 17.27 .jpg'
     end
   end
-
 
 end
