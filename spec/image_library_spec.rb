@@ -88,6 +88,10 @@ describe Image do
     expect(image_library.inserted_text).to eq ''
   end
 
+  # todo needed for the code to run
+  # expected: "/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg"
+  #      got: "/Users/mark/RubymineProjects/photo-renamer//images/no_renderer.jpg"
+
   it "should reveal correct image file names while cycling" do
     expect(image_library.next.file).to eq full_file_name_1
     expect(image_library.previous.file).to eq full_file_name_5_image
