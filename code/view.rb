@@ -60,6 +60,7 @@ class View
       @insertion_text.background = 'gray'
     end
     @insertion_text.highlightbackground = 'white'
+    lock_fields
   end
 
   def sample(image)

@@ -42,7 +42,6 @@ class ImageFileName
 
   def potential_new_filename(insert_str)
     m = matches_any?
-    m_orig = matches_any_original?
     case true
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
@@ -50,9 +49,10 @@ class ImageFileName
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{m[:type]}"
       when m && insert_str.length == 0 && m[:description].length == 0
         @short_file_name
-      else
-        match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
+      when match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
         match_data[:base_name].strip+' '+match_data[:type]
+      else
+        @short_file_name
     end
   end
 
