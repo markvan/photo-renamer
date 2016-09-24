@@ -38,10 +38,14 @@ class ImageFileName
     matches_transformed? ? matches_transformed?[:description].strip : ''
   end
 
+  def new_inserted_text
+    matches_transformed? ? matches_transformed?[:description].strip : @short_file_name.gsub(/ *\.[a-zA-Z]+$/,'').strip
+  end
+
   def potential_new_filename(insert_str)
     m = matches_any?
     if m
-      "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:minute]}  #{insert_str}  #{m[:type]}"
+      "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
     else
       @short_file_name
     end

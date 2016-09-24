@@ -1,17 +1,39 @@
 class View
 
-  def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
+  def initialize(dir, root)
+    entry_width = 70
+    label_width = 14
+    grid_cell( TkLabel.new(root)  { width label_width; text '    Original'; justify 'right'}, 1, 1, 'e')
+    grid_cell( TkLabel.new(root)  { width label_width; text 'Description' },                  2, 1, 'e')
+    grid_cell( TkLabel.new(root)  { width label_width; text '    Current' },                  3, 1, 'e')
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @image = Image.new(@dir)
-    @original_filename = original_name_widget
-    @insertion_text = insertion_text_widget
-    @current_filename = current_name_widget
-    @image_view = TkLabel.new($root)
-    set_image_and_text(@image.next)
+    @original_filename = grid_cell( TkEntry.new(root) { width entry_width },                       1, 2, 'w')
+    @insertion_text    = grid_cell( TkEntry.new(root) { width entry_width; validate 'key' },       2, 2, 'w')
+    @insertion_text.validatecommand([proc{|p| validate_inserted_text(p)}, '%P'])
+    @current_filename  = grid_cell( TkEntry.new(root) { width entry_width },                       3, 2, 'w')
+    @image_view        = TkLabel.new(root)
+    @image_view.grid('row' => 4, 'column' => 0, 'columnspan' => 3, 'pady' => 25)
+    set_image_with_first_text(@image.next)
   end
 
-  def potential_filename_with_inserted_str(insert_str)
-    potential_new_fn = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
+  def grid_cell(tk_widget, row, column, sticky)
+    tk_widget.grid('row' => row, 'column' => column,'sticky' => sticky)
+    tk_widget
+  end
+
+  def xxx(insert_str)
+    if insert_str == ''
+      potential_new_fn = @original_filename.value
+    else
+      matches = ImageFileName.new(@original_filename.value)
+      if matches
+        potential_new_fn = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
+      else
+        potential_new_fn = insert_str+' '+matches[:type]
+      end
+    end
+
     if potential_new_fn
       if @image.change_name(potential_new_fn)
         @insertion_text.highlightbackground = 'green'
@@ -22,19 +44,19 @@ class View
         @insertion_text.highlightbackground = 'red'
       end
     end
+  end
+
+
+  def validate_inserted_text(insert_str)
 
   end
 
   def next_image
-    set_image_and_text(@image.next)
+    set_image_with_first_text(@image.next)
   end
 
   def previous_image
-    set_image_and_text(@image.previous)
-  end
-
-  def tk_lable
-    @image_view
+    set_image_with_first_text(@image.previous)
   end
 
   private
@@ -43,21 +65,21 @@ class View
     ImageFileName.new(@original_filename.value).potential_new_filename(insert_str)
   end
 
-  def set_image_and_text(image)
-    @image_view.image  = sample(image)
+  def set_image_with_first_text(image)
     unlock_fields
+    @image_view.image  = sample(image)
     @original_filename.value = @image.short_file_name
     @current_filename.value  = @original_filename.value
-    lock_fields
     filename = ImageFileName.new(image.file)
-    if filename.matches_any?
-      @insertion_text.value = filename.inserted_text
-      @insertion_text.background = 'white'
-    else
-      @insertion_text.value = ''
-      @insertion_text.background = 'gray'
-    end
-    @insertion_text.highlightbackground = 'white'
+    # setting the insertion text causes validation
+    @insertion_text.value     = ''
+    @insertion_text.background = 'red'
+    @insertion_text.value     = filename.new_inserted_text
+    @insertion_text.value     = 'shite'
+
+
+    #@insertion_text.highlightbackground = 'white'
+    lock_fields
   end
 
   def sample(image)
@@ -76,6 +98,7 @@ class View
   def unlock_fields
     @original_filename.state = 'normal'
     @current_filename.state = 'normal'
+    @insertion_textstate = 'normal'
   end
 
   def lock_fields
