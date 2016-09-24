@@ -90,19 +90,19 @@ describe Image do
 
   it "should reveal correct image file names while cycling" do
     expect(image_library.next.file).to eq full_file_name_1
-    expect(image_library.previous_image.file).to eq full_file_name_5_image
+    expect(image_library.previous.file).to eq full_file_name_5_image
     expect(image_library.next.file).to eq full_file_name_1
     expect(image_library.next.file).to eq full_file_name_2
     expect(image_library.next.file).to eq full_file_name_3
     expect(image_library.next.file).to eq full_file_name_4_image
     expect(image_library.next.file).to eq full_file_name_5_image
     expect(image_library.next.file).to eq full_file_name_1
-    expect(image_library.previous_image.file).to eq full_file_name_5_image
-    expect(image_library.previous_image.file).to eq full_file_name_4_image
-    expect(image_library.previous_image.file).to eq full_file_name_3
-    expect(image_library.previous_image.file).to eq full_file_name_2
-    expect(image_library.previous_image.file).to eq full_file_name_1
-    expect(image_library.previous_image.file).to eq full_file_name_5_image
-    expect(image_library.previous_image.file).to eq full_file_name_4_image
+    expect(image_library.previous.file).to eq full_file_name_5_image
+    expect(image_library.previous.file).to eq full_file_name_4_image
+    expect(image_library.previous.file).to eq full_file_name_3
+    expect(image_library.previous.file).to eq full_file_name_2
+    expect(image_library.previous.file).to eq full_file_name_1
+    expect(image_library.previous.file).to eq full_file_name_5_image
+    expect(image_library.previous.file).to eq full_file_name_4_image
   end
 end
