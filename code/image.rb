@@ -7,11 +7,11 @@ class Image
   end
 
   def next
-    get_image(:next_image)
+    get_image_to_show(:next_image)
   end
 
   def previous
-    get_image(:previous_image)
+    get_image_to_show(:previous_image)
   end
 
   def full_file_name
@@ -31,6 +31,7 @@ class Image
     return false if potential_short_name.empty?
     full_old_name = @files[@index]
     full_potential_name = @dir + potential_short_name
+    # need to make sure dont get into this method if the file name has not changed
     return false if full_potential_name == full_old_name || File.exist?(full_potential_name)
     File.rename(full_old_name, full_potential_name)
     @files[@index] = full_potential_name
@@ -39,7 +40,7 @@ class Image
 
   private
 
-  def get_image(retriever)
+  def get_image_to_show(retriever)
     send(retriever)
     image = TkPhotoImage.new
     case true
@@ -48,7 +49,7 @@ class Image
       when !!@full_file_name.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/)
         image.file = @full_file_name
       else
-        image.file = __dir__ + '/../images/no_renderer.jpg'
+        image.file = ruby_root + '/images/no_renderer.jpg'
     end
     image
   end

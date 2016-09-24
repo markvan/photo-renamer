@@ -17,21 +17,21 @@ class ImageFileName
                             (?<hour>\d\d).
                             (?<minute>\d\d).
                             (?<second>\d\d)
-                            (?<type>\..*)$/x ,
-
-    :TRANSFORMED_PATTERN => /^(?<year>\d\d\d\d).
-                            (?<month>\d\d).
-                            (?<day>\d\d)[ _-]+
-                            (?<hour>\d\d).
-                            (?<minute>\d\d)
-                            (?<description>.*)
                             (?<type>\..*)$/x
   }
 
+  TRANSFORMED_PATTERN =  /^(?<year>\d\d\d\d).
+                              (?<month>\d\d).
+                              (?<day>\d\d)[ ]+
+                              (?<hour>\d\d).
+                              (?<minute>\d\d)[ ]+
+                              (?<description>.*)[ ]*
+                              (?<type>\..*)$/x
+
   def initialize(name)
     name.strip!
-    name.sub!(/.*\//, '') if name[0] == '/'
     @short_file_name = name
+    name.sub!(/.*\//, '') if name[0] == '/'
   end
 
   def inserted_text
@@ -39,21 +39,37 @@ class ImageFileName
   end
 
   def potential_new_filename(insert_str)
-    m = matches_any?
-    if m
-      "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}:#{m[:minute]}  #{insert_str}  #{m[:type]}"
-    else
-      @short_file_name
+    m = matches_any_original?
+    case true
+      when m && insert_str.length > 0
+        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
+      when m && insert_str.length == 0
+        @short_file_name
+      else
+        match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
+        match_data[:base_name].strip+' '+match_data[:type]
     end
   end
 
   def matches_transformed?
-    matches?(PATTERNS[:TRANSFORMED_PATTERN])
+    matches?(TRANSFORMED_PATTERN) || false
+  end
+
+  def matches_any_original?
+    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
+    found.count > 0 ? matches?(found.to_a[0][1]) : false
+  end
+
+  def matches_lenovo?
+    matches?(PATTERNS[:LENOVO_PATTERN]) || false
+  end
+
+  def matches_screenshot?
+    matches?(PATTERNS[:SCREEN_SHOT_PATTERN]) || false
   end
 
   def matches_any?
-    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
-    found.count > 0 ? matches?(found.to_a[0][1]) : false
+    matches_transformed? || matches_any_original?
   end
 
   def matches?(pattern)

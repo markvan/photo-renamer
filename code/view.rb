@@ -10,19 +10,19 @@ class View
     set_image_and_text(@image.next)
   end
 
-  def potential_filename_with_inserted_str(insert_str)
-    potential_new_fn = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
-    if potential_new_fn
-      if @image.change_name(potential_new_fn)
+  def change_fn_and_text_using_insert_str(insert_str)
+    new_name = potential_new_filename(insert_str.strip) #todo fix trailing spaces ui
+    case true
+      when new_name == @current_filename.value
+        nil
+      when new_name && @image.change_name(new_name)
         @insertion_text.highlightbackground = 'green'
         @current_filename.state = 'normal'
         @current_filename.value = @image.short_file_name
         @current_filename.state = 'readonly'
       else
         @insertion_text.highlightbackground = 'red'
-      end
     end
-
   end
 
   def next_image
@@ -44,20 +44,12 @@ class View
   end
 
   def set_image_and_text(image)
+    filename = ImageFileName.new(image.file)
     @image_view.image  = sample(image)
     unlock_fields
-    @original_filename.value = @image.short_file_name
-    @current_filename.value  = @original_filename.value
-    lock_fields
-    filename = ImageFileName.new(image.file)
-    if filename.matches_any?
-      @insertion_text.value = filename.inserted_text
-      @insertion_text.background = 'white'
-    else
-      @insertion_text.value = ''
-      @insertion_text.background = 'gray'
-    end
-    @insertion_text.highlightbackground = 'white'
+    @original_filename.value = filename.short_file_name
+    @current_filename.value  = filename.short_file_name
+    @insertion_text.value    = filename.inserted_text
   end
 
   def sample(image)
@@ -76,6 +68,7 @@ class View
   def unlock_fields
     @original_filename.state = 'normal'
     @current_filename.state = 'normal'
+    @insertion_text.state = 'normal'
   end
 
   def lock_fields

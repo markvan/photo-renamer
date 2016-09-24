@@ -70,7 +70,7 @@ class Layout
 
   def setup_dir(dir)
     @image_view = View.new(dir, @original_name, @insertion_text, @current_name)
-    @insertion_text.validatecommand([proc{|p| image_view.potential_filename_with_inserted_str(p)}, '%P'])
+    @insertion_text.validatecommand([proc{|p| image_view.change_fn_and_text_using_insert_str(p)}, '%P'])
     @image_view.tk_lable.grid('row' => 4, 'column' => 0, 'columnspan' => 3, 'pady' => 25)
   end
 
