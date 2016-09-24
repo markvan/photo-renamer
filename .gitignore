@@ -1,3 +1,5 @@
 .idea
+coverage
 run.log
 notes.txt
+spec/image_library/*

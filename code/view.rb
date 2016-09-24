@@ -7,24 +7,24 @@ class View
     @insertion_text = insertion_text_widget
     @current_filename = current_name_widget
     @image_view = TkLabel.new($root)
+    Dir.glob(@dir+'*').each{ |unused| set_image_and_text(@image.next) }
     set_image_and_text(@image.next)
   end
 
   def validate_insert(insert_str)
-    puts "validate_insert for '#{@original_filename.value}' using '#{insert_str}' "
-    new_name = potential_new_filename(insert_str.strip)
-    case true
-      when new_name == @current_filename.value
-        nil
-      when new_name && @image.change_name(new_name)
+    puts "validate_insert #{@original_filename.value} using #{insert_str}"
+    potential_new_fn = potential_new_filename(insert_str.strip)
+    if potential_new_fn
+      if @image.change_name(potential_new_fn)
         @insertion_text.highlightbackground = 'green'
         @current_filename.state = 'normal'
         @current_filename.value = @image.short_file_name
         @current_filename.state = 'readonly'
       else
         @insertion_text.highlightbackground = 'red'
+      end
     end
-    @insertion_text.value    = insert_str
+
   end
 
   def next_image
@@ -46,12 +46,20 @@ class View
   end
 
   def set_image_and_text(image)
-    filename = ImageFileName.new(image.file)
     @image_view.image  = sample(image)
     unlock_fields
-    @original_filename.value = filename.short_file_name
-    @current_filename.value  = filename.short_file_name
-    @insertion_text.value    = filename.inserted_text
+    @original_filename.value = @image.short_file_name
+    @current_filename.value  = @original_filename.value
+    lock_fields
+    filename = ImageFileName.new(image.file)
+    if filename.matches_any?
+      @insertion_text.value = filename.inserted_text
+      @insertion_text.background = 'white'
+    else
+      @insertion_text.value = ''
+      @insertion_text.background = 'gray'
+    end
+    @insertion_text.highlightbackground = 'white'
   end
 
   def sample(image)

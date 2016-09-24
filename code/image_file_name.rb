@@ -39,7 +39,7 @@ class ImageFileName
   end
 
   def potential_new_filename(insert_str)
-    m = matches_any_original?
+    m = matches_any?
     case true
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"

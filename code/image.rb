@@ -31,7 +31,6 @@ class Image
     return false if potential_short_name.empty?
     full_old_name = @files[@index]
     full_potential_name = @dir + potential_short_name
-    # need to make sure dont get into this method if the file name has not changed
     return false if full_potential_name == full_old_name || File.exist?(full_potential_name)
     File.rename(full_old_name, full_potential_name)
     @files[@index] = full_potential_name
