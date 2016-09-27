@@ -9,6 +9,7 @@ require 'tkextlib/tkimg'
 require ruby_root+'/code/image'
 require ruby_root+'/code/view'
 require ruby_root+'/code/image_file_name'
+require ruby_root+'/code/check_exif'
 
 class Layout
 

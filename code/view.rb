@@ -1,48 +1,3 @@
-require 'delegate'
-
-class CheckExif
-
-  class Reader < SimpleDelegator
-    def readbyte;
-      readchar;
-    end unless File.method_defined?(:readbyte)
-
-    def readint;
-      (readbyte << 8) + readbyte;
-    end
-
-    def readframe;
-      read(readint - 2);
-    end
-
-    def readsof;
-      [readint, readbyte, readint, readint, readbyte];
-    end
-
-    def next
-      c = readbyte while c != 0xFF
-      c = readbyte while c == 0xFF
-      c
-    end
-
-  end
-
-  def val?(io)
-    io = Reader.new(io)
-    io.readbyte == 0xFF && io.readbyte == 0xD8
-  end
-
-  def valid?(file)
-    if file.kind_of? String
-      File.open(file, 'rb') { |io| val?(io) }
-    else
-      val?(file.dup)
-    end
-  end
-
-end
-
-
 class View
 
   def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
@@ -53,14 +8,7 @@ class View
     @current_filename = current_name_widget
     @image_view = TkLabel.new($root)
     Dir.glob(@dir+'*').each do |full_file_name|
-      well_formed = CheckExif.new.valid?(full_file_name)
-      if well_formed
-        exif = EXIFR::JPEG.new("#{full_file_name}")
-        msg = (exif.exif? ? 'd+t '+exif.date_time_original.to_s : 'No EXIF')
-      else
-        msg = ('No EXIF at all')
-      end
-      puts "* #{File.basename(full_file_name)}   ***  wellformed=#{well_formed}  #{msg}"
+      puts "#{File.basename(full_file_name)}   ***  #{CheckExif.new(full_file_name).date_time_msg}"
       set_image_and_text(@image.next)
     end
     set_image_and_text(@image.next)
