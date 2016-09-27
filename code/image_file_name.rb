@@ -1,9 +1,12 @@
+require 'exifr'
+include EXIFR
+
 class ImageFileName
 
   attr_reader :short_file_name
 
   PATTERNS = {
-    :LENOVO_PATTERN  => /^IMG_(?<year>\d\d\d\d)
+    :LENOVO        => /^IMG_(?<year>\d\d\d\d)
                             (?<month>\d\d)
                             (?<day>\d\d)_
                             (?<hour>\d\d)
@@ -12,7 +15,16 @@ class ImageFileName
                             (?<description>)
                             (?<type>\.jpg)$/x ,
 
-    :SAMSUNG_ACE_PATTERN  => /(?<year>\d\d\d\d)-
+    :LUMIX            => /^P(?<year>)
+                            (?<month>)
+                            (?<day>)
+                            (?<hour>)
+                            (?<minute>)
+                            (?<second>)
+                            (?<description>\d\d\d\d\d\d\d)
+                            (?<type>\.JPG)$/x ,
+
+    :SAMSUNG_ACE        => /(?<year>\d\d\d\d)-
                             (?<month>\d\d)-
                             (?<day>\d\d)[ ]
                             (?<hour>\d\d)\.
@@ -21,7 +33,8 @@ class ImageFileName
                             (?<description>)
                             (?<type>\.jpg)$/x ,
 
-    :SCREEN_SHOT_PATTERN => /^Screen[ ]Shot[ ](?<year>\d\d\d\d)-
+    :SCREEN_SHOT        => /^Screen[ ]Shot[ ]
+                            (?<year>\d\d\d\d)-
                             (?<month>\d\d)-
                             (?<day>\d\d)[ ]at[ ]
                             (?<hour>\d\d).
@@ -30,19 +43,55 @@ class ImageFileName
                             (?<description>)
                             (?<type>\.png)$/x
   }
+  
+  def matches_lenovo?
+    matches?(PATTERNS[:LENOVO]) || false
+  end
 
-  TRANSFORMED_PATTERN =  /^(?<year>\d\d\d\d)-
+  def matches_lumix?
+    matches?(PATTERNS[:LUMIX]) || false
+  end
+
+  def matches_samsung_ace?
+    matches?(PATTERNS[:SAMSUNG_ACE]) || false
+  end
+
+  def matches_screenshot?
+    matches?(PATTERNS[:SCREEN_SHOT]) || false
+  end
+
+  TRANSFORMED =  /^(?<year>\d\d\d\d)-
                               (?<month>\d\d)-
                               (?<day>\d\d)[ ]
                               (?<hour>\d\d)\.
                               (?<minute>\d\d)[ ]*
                               (?<description>.*)[ ]*
                               (?<type>\..*)$/x
+  
+  def matches_transformed?
+    (! matches_samsung_ace? && matches?(TRANSFORMED)) || false
+  end
 
-  def initialize(name)
-    name.strip!
-    @short_file_name = name
-    name.sub!(/.*\//, '') if name[0] == '/'
+  def matches_any_original?
+    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
+    found.count > 0 ? matches?(found.to_a[0][1]) : false
+  end
+
+  def matches_any?
+    matches_transformed? || matches_any_original?
+  end
+
+  def matches?(pattern)
+    @short_file_name.match(pattern)
+  end
+  
+  # --------------------------------------------------------------------------
+
+  def initialize(file)
+    # to work with Lumix Pddddddd formats 'file' must be a full path to a file below /*
+    file.strip!
+    @full_file_name  = file
+    @short_file_name = File.basename(file)
   end
 
   def inserted_text
@@ -57,7 +106,10 @@ class ImageFileName
   def potential_new_filename(insert_str)
     m = matches_any?
     t = matches_transformed?
+    lu = matches_lumix?
     case true
+      when lu && insert_str.length > 0
+        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
       # got a string to insert, make the transformed fn regardless of original fn format
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
@@ -82,35 +134,6 @@ class ImageFileName
       else
         @short_file_name
     end
-  end
-
-  def matches_transformed?
-    (! matches_samsung_ace? && matches?(TRANSFORMED_PATTERN)) || false
-  end
-
-  def matches_any_original?
-    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
-    found.count > 0 ? matches?(found.to_a[0][1]) : false
-  end
-
-  def matches_lenovo?
-    matches?(PATTERNS[:LENOVO_PATTERN]) || false
-  end
-
-  def matches_samsung_ace?
-    matches?(PATTERNS[:SAMSUNG_ACE_PATTERN]) || false
-  end
-
-  def matches_screenshot?
-    matches?(PATTERNS[:SCREEN_SHOT_PATTERN]) || false
-  end
-
-  def matches_any?
-    matches_transformed? || matches_any_original?
-  end
-
-  def matches?(pattern)
-    @short_file_name.match(pattern)
   end
 
 end
