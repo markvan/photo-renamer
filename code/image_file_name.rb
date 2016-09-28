@@ -87,11 +87,15 @@ class ImageFileName
   
   # --------------------------------------------------------------------------
 
-  def initialize(file)
-    # to work with Lumix Pddddddd formats 'file' must be a full path to a file below /*
-    file.strip!
-    @full_file_name  = file
-    @short_file_name = File.basename(file)
+  def initialize(orig_file_name, curr_file_name = ' ')
+    # to work with Lumix Pddddddd formats 'file' must be a full path to a file below '/*'
+    puts "Image file name init: #{orig_file_name} #{curr_file_name}"
+
+    @full_file_name  = orig_file_name.strip
+
+    @short_file_name = File.basename(@full_file_name)
+
+    @curr_file_name = curr_file_name.strip
   end
 
   def inserted_text
@@ -108,8 +112,14 @@ class ImageFileName
     t = matches_transformed?
     lu = matches_lumix?
     case true
+
       when lu && insert_str.length > 0
-        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
+        dt = CheckExif.new(@curr_file_name).date_time.gsub!(/:/, '.')
+        "#{dt}  #{insert_str}  #{m[:type]}"
+
+      when lu && insert_str.length == 0
+        @short_file_name
+
       # got a string to insert, make the transformed fn regardless of original fn format
       when m && insert_str.length > 0
         "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
@@ -120,7 +130,6 @@ class ImageFileName
 
       when t && t[:description].length == 0 && insert_str.length == 0
         "#{t[:year]}-#{t[:month]}-#{t[:day]} #{t[:hour]}.#{t[:minute]} #{t[:type]}"
-
 
       # original fn of any matched type has NO description, just space the extension away from fn body
       when m && insert_str.length == 0 && m[:description].length == 0

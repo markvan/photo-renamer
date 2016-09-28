@@ -13,7 +13,7 @@ class CheckExif
       msg = get_date_time
       msg.nil? ? 'No date and time' : msg
     else
-    'No EXIF to get date adn time'
+    'No EXIF'
     end
   end
 
@@ -29,7 +29,7 @@ class CheckExif
 
   def get_date_time
     msg = @exif.date_time_original.to_s
-    msg != nil && !msg.empty? ? msg.strip.gsub(/ [+-]\d\d\d\d$/, '') : nil
+    msg != nil && !msg.empty? ? msg.strip.gsub(/:\d\d [+-]\d\d\d\d$/, '') : nil
   end
 
   def val?(io)

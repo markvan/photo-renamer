@@ -3,6 +3,7 @@ class Image
   def initialize(dir)
     @dir = ( dir =~ /\/$/  ?  dir : dir + '/' )
     @files = Dir[@dir+'*'].sort_by(&:downcase)
+    @orig_files = Dir[@dir+'*'].sort_by(&:downcase)
     @index = -1
   end
 
@@ -38,6 +39,10 @@ class Image
   end
 
   private
+
+  def unchanged_file_name
+    @orig_files[@index]
+  end
 
   def get_image_to_show(retriever)
     send(retriever)

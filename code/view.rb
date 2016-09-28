@@ -1,9 +1,10 @@
 class View
 
-  def initialize(dir, original_name_widget, insertion_text_widget, current_name_widget)
+  def initialize(dir, original_name_widget, date_time_widget, insertion_text_widget, current_name_widget)
     @dir = (dir =~ /\/$/ ? dir : dir + '/')
     @image = Image.new(@dir)
     @original_filename = original_name_widget
+    @date_time = date_time_widget
     @insertion_text = insertion_text_widget
     @current_filename = current_name_widget
     @image_view = TkLabel.new($root)
@@ -45,7 +46,7 @@ class View
   private
 
   def potential_new_filename(insert_str)
-    ImageFileName.new(@dir+@original_filename.value).potential_new_filename(insert_str)
+    ImageFileName.new(@dir+@original_filename.value, @dir+@current_filename.value).potential_new_filename(insert_str)
   end
 
   def set_image_and_text(image)
@@ -53,6 +54,7 @@ class View
     unlock_fields
     @original_filename.value = @image.short_file_name
     @current_filename.value = @original_filename.value
+    @date_time.value        = CheckExif.new(@dir+@original_filename.value).date_time_msg
     lock_fields
     filename = ImageFileName.new(image.file) # This use of ImageFileName without full fn is OK
     if filename.matches_any?
@@ -63,7 +65,6 @@ class View
       @insertion_text.background = 'gray'
     end
     @insertion_text.highlightbackground = 'white'
-    lock_fields
   end
 
   def sample(image)
@@ -83,6 +84,7 @@ class View
     @original_filename.state = 'normal'
     @current_filename.state = 'normal'
     @insertion_text.state = 'normal'
+    @date_time.state = 'normal'
   end
 
   def lock_fields
@@ -90,6 +92,9 @@ class View
     @original_filename.borderwidth = 0
     @current_filename.state = 'readonly'
     @current_filename.borderwidth = 0
+    @date_time
+    @date_time.state = 'readonly'
+    @date_time.borderwidth = 0
   end
 
 end
