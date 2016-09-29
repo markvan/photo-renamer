@@ -46,16 +46,14 @@ class Image
 
   def get_image_to_show(retriever)
     send(retriever)
-    image = TkPhotoImage.new
     case true
       when File.directory?(@full_file_name)
-        image.file = ruby_root + '/images/folder.jpg'
+        ruby_root + '/images/folder.jpg'
       when !!@full_file_name.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/)
-        image.file = @full_file_name
+        @full_file_name
       else
-        image.file = ruby_root + '/images/no_renderer.jpg'
+        ruby_root + '/images/no_renderer.jpg'
     end
-    image
   end
 
   def next_image
