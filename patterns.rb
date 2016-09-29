@@ -7,7 +7,7 @@ PATTERNS = {
                             (?<minute>\d\d)
                             (?<second>\d\d)
                             (?<description>)
-                            (?<type>\.jpg)$/x ,
+                            (?<extension>\.jpg)$/x ,
 
     :LUMIX            => /^P(?<year>)
                             (?<month>)
@@ -16,7 +16,7 @@ PATTERNS = {
                             (?<minute>)
                             (?<second>)
                             (?<description>\d\d\d\d\d\d\d)
-                            (?<type>\.JPG)$/x ,
+                            (?<extension>\.JPG)$/x ,
 
     :SAMSUNG_ACE        => /(?<year>\d\d\d\d)-
                             (?<month>\d\d)-
@@ -25,7 +25,7 @@ PATTERNS = {
                             (?<minute>\d\d)\.
                             (?<second>\d\d)
                             (?<description>)
-                            (?<type>\.jpg)$/x ,
+                            (?<extension>\.jpg)$/x ,
 
     :SCREEN_SHOT        => /^Screen[ ]Shot[ ]
                             (?<year>\d\d\d\d)-
@@ -35,7 +35,7 @@ PATTERNS = {
                             (?<minute>\d\d).
                             (?<second>\d\d)
                             (?<description>)
-                            (?<type>\.png)$/x
+                            (?<extension>\.png)$/x
 }
 
 
@@ -45,4 +45,4 @@ TRANSFORMED =  /^(?<year>\d\d\d\d)-
                               (?<hour>\d\d)\.
                               (?<minute>\d\d)[ ]*
                               (?<description>.*)[ ]*
-                              (?<type>\..*)$/x
+                              (?<extension>\..*)$/x

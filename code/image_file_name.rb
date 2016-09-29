@@ -22,42 +22,45 @@ class ImageFileName
 
   def reformat_with_space
     match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
-    match_data[:base_name].strip+' '+match_data[:type]
+    match_data[:base_name].strip+' '+match_data[:extension]
   end
 
-  def potential_new_filename(insert_str)
+  def potential_new_filename(new_description)
     m = matches_any?
     t = matches_transformed?
     lu = matches_lumix?
     case true
 
-      when lu && insert_str.length > 0
+      # lumix with new description
+      when lu && new_description.length > 0
         dt = CheckExif.new(@curr_file_name).date_time.gsub!(/:/, '.')
-        "#{dt}  #{insert_str}  #{m[:type]}"
+        "#{dt}  #{new_description}  #{m[:extension]}"
 
-      when lu && insert_str.length == 0
+      # lumix without new description
+      when lu && new_description.length == 0
         @short_file_name
 
-      # got a string to insert, make the transformed fn regardless of original fn format
-      when m && insert_str.length > 0
-        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{insert_str}  #{m[:type]}"
+      # anything (other than lumix) with a new description
+      when m && new_description.length > 0
+        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{new_description}  #{m[:extension]}"
 
-      # transformed original fn has a description, want rid of it by making insert field empty
-      when m && insert_str.length == 0 && m[:description].length > 0
-        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{m[:type]}"
+      # anything (other than lumix) with no new description and an old descripotion
+      when m && m[:description].length > 0 && new_description.length == 0
+        "#{m[:year]}-#{m[:month]}-#{m[:day]} #{m[:hour]}.#{m[:minute]}  #{m[:extension]}"
 
-      when t && t[:description].length == 0 && insert_str.length == 0
-        "#{t[:year]}-#{t[:month]}-#{t[:day]} #{t[:hour]}.#{t[:minute]} #{t[:type]}"
+      # transformed with no new description and no old descripotion
+      when t && t[:description].length == 0 && new_description.length == 0
+        "#{t[:year]}-#{t[:month]}-#{t[:day]} #{t[:hour]}.#{t[:minute]} #{t[:extension]}"
 
-      # original fn of any matched type has NO description, just space the extension away from fn body
-      when m && insert_str.length == 0 && m[:description].length == 0
+      # anything (other than lumix and transformed) with no new description and no old descripotion
+      when m && new_description.length == 0 && m[:description].length == 0
         @short_file_name
 
-      # original fn is not matched, has an extension, just space the extension away
+      # anything with an extension
       when match_data = @short_file_name.match(/(?<base_name>.*)(?<type>\.[a-zA-Z]+)$/)
-        match_data[:base_name].strip+' '+match_data[:type]
+        match_data[:base_name].strip+' '+match_data[:extension]
 
-      # original fn does not havve an extension
+      # anything without an extension
       else
         @short_file_name
     end
