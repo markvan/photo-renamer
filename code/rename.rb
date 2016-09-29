@@ -1,15 +1,4 @@
-require 'fileutils'
-
-def ruby_root
-  __dir__.gsub(/\/code/, '')
-end
-
-require 'tk'
-require 'tkextlib/tkimg'
-require ruby_root+'/code/image'
-require ruby_root+'/code/view'
-require ruby_root+'/code/image_file_name'
-require ruby_root+'/code/check_exif'
+require __dir__+'/requires'
 
 class Layout
 

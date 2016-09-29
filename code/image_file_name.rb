@@ -43,22 +43,8 @@ class ImageFileName
                             (?<description>)
                             (?<type>\.png)$/x
   }
-  
-  def matches_lenovo?
-    matches?(PATTERNS[:LENOVO]) || false
-  end
 
-  def matches_lumix?
-    matches?(PATTERNS[:LUMIX]) || false
-  end
 
-  def matches_samsung_ace?
-    matches?(PATTERNS[:SAMSUNG_ACE]) || false
-  end
-
-  def matches_screenshot?
-    matches?(PATTERNS[:SCREEN_SHOT]) || false
-  end
 
   TRANSFORMED =  /^(?<year>\d\d\d\d)-
                               (?<month>\d\d)-
@@ -67,34 +53,15 @@ class ImageFileName
                               (?<minute>\d\d)[ ]*
                               (?<description>.*)[ ]*
                               (?<type>\..*)$/x
-  
-  def matches_transformed?
-    (! matches_samsung_ace? && matches?(TRANSFORMED)) || false
-  end
 
-  def matches_any_original?
-    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
-    found.count > 0 ? matches?(found.to_a[0][1]) : false
-  end
-
-  def matches_any?
-    matches_transformed? || matches_any_original?
-  end
-
-  def matches?(pattern)
-    @short_file_name.match(pattern)
-  end
-  
   # --------------------------------------------------------------------------
 
   def initialize(orig_file_name, curr_file_name = ' ')
+    make_matchers
     # to work with Lumix Pddddddd formats 'file' must be a full path to a file below '/*'
     puts "Image file name init: #{orig_file_name} #{curr_file_name}"
-
     @full_file_name  = orig_file_name.strip
-
     @short_file_name = File.basename(@full_file_name)
-
     @curr_file_name = curr_file_name.strip
   end
 
@@ -143,6 +110,34 @@ class ImageFileName
       else
         @short_file_name
     end
+  end
+
+  def matches_transformed?
+    (! matches_samsung_ace? && matches?(TRANSFORMED)) || false
+  end
+
+  def matches_any_original?
+    found = PATTERNS.reject{|name, pattern| ! matches?(pattern) }
+    found.count > 0 ? matches?(found.to_a[0][1]) : false
+  end
+
+  def matches_any?
+    matches_transformed? || matches_any_original?
+  end
+
+  private
+
+  def make_matchers
+    PATTERNS.each_key do |key|
+      name = 'matches_'+key.to_s.downcase+'?'
+      define_singleton_method(name.to_sym) do
+        matches?(PATTERNS[key]) || false
+      end
+    end
+  end
+
+  def matches?(pattern)
+    @short_file_name.match(pattern)
   end
 
 end
