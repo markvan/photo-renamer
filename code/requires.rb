@@ -4,6 +4,7 @@ Shoes.setup do
   gem 'rspec'
   gem 'exifr'
   gem 'fastimage'
+  gem 'local-fastimage_resize'
 end
 
 def ruby_root

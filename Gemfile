@@ -2,4 +2,4 @@ source 'https://rubygems.org'
 
 gem 'rspec'
 gem 'exifr'
-gem 'fastimage'
+gem 'local-fastimage_resize', require: 'fastimage/resize'

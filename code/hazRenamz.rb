@@ -1,4 +1,3 @@
-
 $col_0 = '15%'
 $col_1 = '25%'
 $col_2 = '60%'
@@ -18,6 +17,9 @@ Shoes.app(title: "Haz Renamz",
     image = @controller.image
     @scale = image.scale_factor(500)
     #@image.scale(0.1,0.1) mispositions image
+
+    puts FastImage.resize("/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg", 100, 100).inspect
+    puts '^^^^^^^^^^^^^^^^^^^^^^^^'
     append(@image)
   end
 
