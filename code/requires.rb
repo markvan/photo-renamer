@@ -3,6 +3,7 @@ require 'fileutils'
 Shoes.setup do
   gem 'rspec'
   gem 'exifr'
+  gem 'fastimage'
 end
 
 def ruby_root

@@ -1,4 +1,7 @@
 class Controller
+
+  attr_reader :image
+
   def slf=(obj)
     @shoes=obj
   end

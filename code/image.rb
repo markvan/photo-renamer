@@ -1,3 +1,4 @@
+
 class Image
 
   def initialize(dir)
@@ -13,6 +14,38 @@ class Image
 
   def previous
     get_image_to_show(:previous_image)
+  end
+
+  def size
+    puts 'Image#size --------'
+    puts @full_file_name
+    puts FastImage.size(@full_file_name)
+    FastImage.size(@full_file_name)
+  end
+
+  def scale_factor(dim)
+    dim = dim.to_f
+    sz = size
+    puts sz
+    x = sz[0].to_f
+    y = sz[1].to_f
+    x_scale = dim/x
+    y_scale = dim/y
+    case true
+      when x_scale >= 1.0 && y_scale >= 1.0
+        scale = 1.0
+      when x_scale < 1.0 && y_scale < 1.0
+        scale = [x_scale, y_scale].min
+      when x_scale >= 1.0
+        scale = y_scale
+      else
+        scale = x_scale
+    end
+    puts
+    puts short_file_name
+    puts "  #{dim}: x #{x} x scale #{x_scale} y #{y} y scale #{y_scale} chosen scale #{scale}"
+    puts  "     calc x #{x*scale} calc y #{y*scale}"
+    scale
   end
 
   def full_file_name
