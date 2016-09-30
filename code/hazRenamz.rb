@@ -1,10 +1,12 @@
+
 $col_0 = '15%'
 $col_1 = '25%'
 $col_2 = '60%'
 
-require 'controller'
+require __dir__+'/controller'
 
-Shoes.app do
+Shoes.app(title: "Haz Renamz",
+           width: 800, height: 800, resizable: false) do
 
 
   def three_button(button1, proc1, button2, proc2, button3, proc3)
@@ -15,10 +17,10 @@ Shoes.app do
     end
   end
 
-  def button_title_field(button, button_proc, field_ledgend, setup_edit_line_proc)
+  def button_title_field(button, button_proc, field_legend, setup_edit_line_proc)
     flow do
       stack(width: $col_0) { button(button)  { button_proc.call } }
-      stack(width: $col_1) { para(field_ledgend) }
+      stack(width: $col_1) { para(field_legend) }
       stack(width: $col_2) { setup_edit_line_proc.call  }
     end
   end
