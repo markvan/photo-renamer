@@ -13,22 +13,12 @@ Shoes.app(title: "Haz Renamz",
   end
 
   def set_image(img)
-    puts
-    puts "set_image**** scale  #{@scale}"
-    if @scale != 1.0
-      puts '  scale up'
-      @image.scale(1/@scale, 1/@scale)
-    end
-
-
+    @image.remove
+    @image = image(img)
     image = @controller.image
-    puts image.size
     @scale = image.scale_factor(500)
-    puts "scale new #{@scale}"
-
-    @image.path = img
-    @image.scale(@scale, @scale)
-    puts @image.style
+    #@image.scale(0.1,0.1) mispositions image
+    append(@image)
   end
 
   def three_button(button1, proc1, button2, proc2, button3, proc3)
@@ -58,6 +48,7 @@ Shoes.app(title: "Haz Renamz",
   @controller = Controller.new
   @controller.slf = self
 
+
   three_button( 'dir',  proc { @controller.dir },
                'prev',  proc { @controller.previous },
                'next',  proc { @controller.next } )
@@ -68,15 +59,7 @@ Shoes.app(title: "Haz Renamz",
 
   title_field( 'current', proc { @current_fn = edit_line } )
 
-  flow do
-    stack(width: '100%') do
-      @image = image('/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg', top: 0, left: 0)
-    end
-  end
+  append(@image = image('/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg'))
 
-  flow do
-    @scale=1.0
-    stack(width: $col_2) {para '-------' }
-  end
 
 end
