@@ -34,11 +34,9 @@ Shoes.app do
   controller = Controller.new
   controller.slf = self
 
-  three_button( 'dir',  proc { @image = image('https://www.gravatar.com/avatar/b6c235569392cb2f5cfcc8ec61fc8819') },
+  three_button( 'dir',  proc { @image.path = '/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg'},
                'prev',  proc { controller.prev },
                'next',  proc { controller.next } )
-
-
 
   button_title_field( 'test', proc { controller.test }, 'original', proc { @original_fn = edit_line } )
 
@@ -47,9 +45,13 @@ Shoes.app do
   title_field( 'current', proc { @current_fn = edit_line } )
 
   flow do
-    stack(width: $col_3) {@image = image("http://spiralofhope.com/i/ruby-shoes--nks-kidnap.png") }
+    stack(width: $col_3) do
+      @image = image('/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg')
+    end
   end
 
-
+  flow do
+    stack(width: $col_3) {para '-------' }
+  end
 
 end
