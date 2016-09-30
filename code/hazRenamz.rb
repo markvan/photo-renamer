@@ -13,13 +13,16 @@ Shoes.app(title: "Haz Renamz",
 
   def set_image(img)
     @image.remove
-    @image = image(img)
     image = @controller.image
-    @scale = image.scale_factor(500)
-    #@image.scale(0.1,0.1) mispositions image
+    scale = image.scale_factor(500)
+    if scale < 1.0
+      outfile =  FastImage.resize(img, 500, 500)
+      puts outfile
+      @image = image(outfile)
+    else
+      @image = image(img)
+    end
 
-    puts FastImage.resize("/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg", 100, 100).inspect
-    puts '^^^^^^^^^^^^^^^^^^^^^^^^'
     append(@image)
   end
 

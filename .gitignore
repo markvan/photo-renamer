@@ -1,6 +1,7 @@
 .bundle
 .idea
 coverage
+tmp/*
 run.log
 notes.txt
 spec/image_library/*
