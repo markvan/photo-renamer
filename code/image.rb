@@ -1,3 +1,4 @@
+require 'fastimage'
 
 class Image
 
@@ -17,8 +18,6 @@ class Image
   end
 
   def size
-    puts 'Image#size --------'
-    puts @full_file_name
     puts FastImage.size(@full_file_name)
     FastImage.size(@full_file_name)
   end

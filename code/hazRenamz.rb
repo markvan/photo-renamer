@@ -14,19 +14,21 @@ Shoes.app(title: "Haz Renamz",
 
   def set_image(img)
     puts
-    puts "Shoes.app#set_image scale  #{@scale}"
+    puts "set_image**** scale  #{@scale}"
     if @scale != 1.0
       puts '  scale up'
-      #@image.scale(1/@scale, 1/@scale)
+      @image.scale(1/@scale, 1/@scale)
     end
 
 
     image = @controller.image
-    #puts image.scale_factor(500)
-    #puts "Shoes.app#set_image scale  new #{@scale}"
+    puts image.size
+    @scale = image.scale_factor(500)
+    puts "scale new #{@scale}"
 
     @image.path = img
-    #@image.scale(@scale, @scale)
+    @image.scale(@scale, @scale)
+    puts @image.style
   end
 
   def three_button(button1, proc1, button2, proc2, button3, proc3)
