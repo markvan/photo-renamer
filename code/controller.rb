@@ -4,29 +4,29 @@ class Controller
   end
 
   def dir
-    @shoes.alert('from dispacher smoochie')
+    @shoes.set_image('/Users/mark/RubymineProjects/photo-renamer/spec/image_setup/2005-05-09 23.17.59.jpg')
+  end
+
+  def ruby_root
+    __dir__.gsub(/\/code/,'')
   end
 
   def test
-    from_dir = ruby_root + '/spec/image_setup'
-    to_dir = ruby_root + '/spec/image_library'
-    FileUtils.rm_f( Dir.glob("#{to_dir}/*") )
-    FileUtils.cp( Dir.glob("#{from_dir}/*"), to_dir )
-    setup_dir(to_dir)
-    @shoes.image = @shoes.image ('https://www.gravatar.com/avatar/b6c235569392cb2f5cfcc8ec61fc8819')
+    setup_dir(Directory.test_dir)
   end
 
   def setup_dir(dir)
     @dir = (dir =~ /\/$/ ? dir : dir + '/')
-    @image = @shoes.image(Image.new(@dir))
+    @image = Image.new(@dir)
+    @shoes.set_image(@image.next)
   end
 
-  def prev
-    @image.next
+  def previous
+    @shoes.set_image(@image.previous)
   end
 
   def next
-    @image.next
+    @shoes.set_image(@image.next)
   end
 
 end

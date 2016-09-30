@@ -1,11 +1,14 @@
 require 'fileutils'
-require 'tk'
-require 'tkextlib/tkimg'
+
+Shoes.setup do
+  gem 'rspec'
+  gem 'exifr'
+end
 
 def ruby_root
   __dir__.gsub(/\/code/, '')
 end
 
-['/image', '/view', '/image_file_name', '/check_exif'].each do |name|
+['/controller', '/image', '/directory', '/image_file_name', '/check_exif'].each do |name|
   require __dir__+name
 end

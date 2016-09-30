@@ -3,11 +3,19 @@ $col_0 = '15%'
 $col_1 = '25%'
 $col_2 = '60%'
 
-require __dir__+'/controller'
+require __dir__+'/requires'
 
 Shoes.app(title: "Haz Renamz",
            width: 800, height: 800, resizable: false) do
 
+  def get_image
+    @image
+  end
+
+  def set_image(img)
+    puts img
+    @image.path = img
+  end
 
   def three_button(button1, proc1, button2, proc2, button3, proc3)
     flow do
@@ -36,8 +44,8 @@ Shoes.app(title: "Haz Renamz",
   controller = Controller.new
   controller.slf = self
 
-  three_button( 'dir',  proc { @image.path = '/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg'},
-               'prev',  proc { controller.prev },
+  three_button( 'dir',  proc { controller.dir },
+               'prev',  proc { controller.previous },
                'next',  proc { controller.next } )
 
   button_title_field( 'test', proc { controller.test }, 'original', proc { @original_fn = edit_line } )

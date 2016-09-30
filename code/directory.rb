@@ -1,5 +1,5 @@
 class Directory
-  def test_dir
+  def self.test_dir
     from_dir = ruby_root + '/spec/image_setup'
     to_dir = ruby_root + '/spec/image_library'
     FileUtils.rm_f( Dir.glob("#{to_dir}/*") )
@@ -7,11 +7,11 @@ class Directory
     to_dir
   end
 
-  def choose_dir
+  def self.choose_dir
 
   end
 
-  def ruby_root
+  def self.ruby_root
     __dir__.gsub(/\/code/,'')
   end
 end
