@@ -18,14 +18,12 @@ class Image
   end
 
   def size
-    puts FastImage.size(@full_file_name)
-    FastImage.size(@full_file_name)
+    FastImage.size(image_to_show)
   end
 
   def scale_factor(dim)
     dim = dim.to_f
     sz = size
-    puts sz
     x = sz[0].to_f
     y = sz[1].to_f
     x_scale = dim/x
@@ -40,10 +38,9 @@ class Image
       else
         scale = x_scale
     end
-    puts
-    puts short_file_name
+    puts "scale_factor for #{short_file_name}"
     puts "  #{dim}: x #{x} x scale #{x_scale} y #{y} y scale #{y_scale} chosen scale #{scale}"
-    puts  "     calc x #{x*scale} calc y #{y*scale}"
+    puts "  calc x #{x*scale} calc y #{y*scale}"
     scale
   end
 
@@ -87,6 +84,18 @@ class Image
         ruby_root + '/images/no_renderer.jpg'
     end
   end
+
+  def image_to_show
+    case true
+      when File.directory?(@full_file_name)
+        ruby_root + '/images/folder.jpg'
+      when !!@full_file_name.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|tiff|TIFF)$/)
+        @full_file_name
+      else
+        ruby_root + '/images/no_renderer.jpg'
+    end
+  end
+
 
   def next_image
     @index == @files.count - 1 ? @index = 0 : @index += 1

@@ -12,7 +12,8 @@ Shoes.app(title: "Haz Renamz",
   end
 
   def set_image(img)
-    puts "setimage #{img}"
+    puts
+    puts "setimage for #{img}"
 
     image = @controller.image
     scale = image.scale_factor(500)
