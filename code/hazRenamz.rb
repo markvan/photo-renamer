@@ -1,8 +1,9 @@
+require __dir__+'/requires'
+
 $col_0 = '15%'
 $col_1 = '25%'
 $col_2 = '60%'
-
-require __dir__+'/requires'
+$max_image_dimension = 600
 
 Shoes.app(title: "Haz Renamz",
           width: 800, height: 800, scroll: true) do
@@ -12,17 +13,15 @@ Shoes.app(title: "Haz Renamz",
   end
 
   def set_image(img)
-    puts
-    puts "setimage for #{img}"
     image = @controller.image
-    scale = image.scale_factor(500)
-    if scale < 1.0
-      fn = '/Users/mark/RubymineProjects/photo-renamer/tmp/'+image.short_file_name
+    if image.scale_factor($max_image_dimension) < 1.0
+      fn = ruby_root+'/tmp/'+image.short_file_name
+
+      # todo check this works once the file name is changed interactively
+
       unless File.file?(fn)
         ImageScience.with_image(img) do |i_s_img|
-          i_s_img.thumbnail(500) do |thumb|
-            thumb.save fn
-          end
+          i_s_img.thumbnail($max_image_dimension) { |thumb| thumb.save fn }
         end
       end
       @stk.clear { image(fn) }
@@ -56,8 +55,7 @@ Shoes.app(title: "Haz Renamz",
   end
 
   @controller = Controller.new
-  @controller.slf = self
-
+  @controller.shoes = self
 
   three_button('dir', proc { @controller.dir },
                'prev', proc { @controller.previous },
@@ -68,9 +66,9 @@ Shoes.app(title: "Haz Renamz",
   title_field('description', proc { @description = edit_line })
 
   title_field('current', proc { @current_fn = edit_line })
+
   @stk = stack(width: 500) do
     image('/Users/mark/RubymineProjects/photo-renamer/images/no_renderer.jpg')
   end
-
 
 end
