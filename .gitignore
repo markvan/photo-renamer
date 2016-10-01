@@ -5,3 +5,6 @@ tmp/*
 run.log
 notes.txt
 spec/image_library/*
+images
+libpng
+list.sh
