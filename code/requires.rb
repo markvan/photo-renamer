@@ -4,9 +4,9 @@ Shoes.setup do
   gem 'rspec'
   gem 'exifr'
   gem 'fastimage'
-  gem 'mini_magick'
+  gem 'image_science'
 end
-require 'mini_magick'
+require 'image_science'
 
 def ruby_root
   __dir__.gsub(/\/code/, '')

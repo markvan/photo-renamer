@@ -14,19 +14,19 @@ Shoes.app(title: "Haz Renamz",
   def set_image(img)
     puts
     puts "setimage for #{img}"
-
     image = @controller.image
     scale = image.scale_factor(500)
     if scale < 1.0
-      puts "setimage reduced "
-
-      im = MiniMagick::Image.open(img)
-      im.resize '500x500'
-      im.format 'jpg'
-
-      @stk.clear { image(im.path) }
+      fn = '/Users/mark/RubymineProjects/photo-renamer/tmp/'+image.short_file_name
+      unless File.file?(fn)
+        ImageScience.with_image(img) do |i_s_img|
+          i_s_img.thumbnail(500) do |thumb|
+            thumb.save fn
+          end
+        end
+      end
+      @stk.clear { image(fn) }
     else
-      puts 'setimage un-reduced'
       @stk.clear { image(img) }
     end
   end

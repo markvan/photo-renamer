@@ -38,9 +38,9 @@ class Image
       else
         scale = x_scale
     end
-    puts "scale_factor for #{short_file_name}"
-    puts "  #{dim}: x #{x} x scale #{x_scale} y #{y} y scale #{y_scale} chosen scale #{scale}"
-    puts "  calc x #{x*scale} calc y #{y*scale}"
+    # puts "scale_factor for #{short_file_name}"
+    # puts "  #{dim}: x #{x} x scale #{x_scale} y #{y} y scale #{y_scale} chosen scale #{scale}"
+    # puts "  calc x #{x*scale} calc y #{y*scale}"
     scale
   end
 
