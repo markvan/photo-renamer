@@ -1,3 +1,4 @@
+
 $col_0 = '15%'
 $col_1 = '25%'
 $col_2 = '60%'
@@ -12,18 +13,23 @@ Shoes.app(title: "Haz Renamz",
   end
 
   def set_image(img)
-    @image.remove
     image = @controller.image
     scale = image.scale_factor(500)
     if scale < 1.0
-      outfile =  FastImage.resize(img, 500, 500)
-      puts outfile
-      @image = image(outfile)
-    else
-      @image = image(img)
-    end
+      puts 'setimage reduced'
 
-    append(@image)
+      image = MiniMagick::Image.open(img)
+      puts image.path
+      image.resize '500x500'
+      image.format 'png'
+      fn = ruby_root + '/tmp/display.png'
+      FileUtils.rm_f( fn )
+      image.write( fn )
+      @image.clear { image( fn ) }
+    else
+      puts 'setimage un-reduced'
+      @image.clear { image( img ) }
+    end
   end
 
   def three_button(button1, proc1, button2, proc2, button3, proc3)

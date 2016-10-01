@@ -1,8 +1,8 @@
-require 'fastimage/resize'
+require 'mini_magick'
 
-# https://github.com/sdsykes/fastimage_resize
-# https://github.com/planio-gmbh/local-fastimage_resize/blob/master/README.textile
-# https://github.com/planio-gmbh/local-fastimage_resize
 
-FastImage.resize("/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg", 100, 100,
-                 outfile: "/Users/mark/RubymineProjects/photo-renamer/images/small_folder.jpg")
+image = MiniMagick::Image.open("/Users/mark/RubymineProjects/photo-renamer/images/folder.jpg")
+image.path
+image.resize "100x100"
+image.format "png"
+image.write "/Users/mark/RubymineProjects/photo-renamer/images/small_folder.jpg"

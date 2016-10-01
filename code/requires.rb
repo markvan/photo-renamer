@@ -4,9 +4,9 @@ Shoes.setup do
   gem 'rspec'
   gem 'exifr'
   gem 'fastimage'
-  gem 'local-fastimage_resize'
-
+  gem 'mini_magick'
 end
+require 'mini_magick'
 
 def ruby_root
   __dir__.gsub(/\/code/, '')
