@@ -2,9 +2,14 @@ require __dir__+'/requires'
 
 class Layout
 
+  attr_reader :image_view
+
   def initialize(width, height)
     setup_root(width, height)
-    layout
+    layout_main_controls
+    layout_dir_buttons
+    # the image is laid out when a directory to process is chosen (inc test dir)
+    # see setup_dir
   end
 
   def choose_dir
@@ -20,10 +25,6 @@ class Layout
     setup_dir(to_dir)
   end
 
-  def image_view
-    @image_view
-  end
-
   private
 
   def self.instance
@@ -36,16 +37,12 @@ class Layout
     @root.title = 'haz renamz'
   end
 
-  def layout
+  def layout_main_controls
     entry_width = 70
     label_width = 14
     grid_cell( TkButton.new(@root) { text 'dir';  command proc { Layout.instance.choose_dir } },                0, 0, 'w')
     grid_cell( TkButton.new(@root) { text 'prev'; command proc { Layout.instance.image_view.previous_image } }, 0, 1, 'e')
     grid_cell( TkButton.new(@root) { text 'next'; command proc { Layout.instance.image_view.next_image } },     0, 2, 'w')
-
-
-
-
 
     grid_cell( TkButton.new(@root) { text 'test'; command proc { Layout.instance.test_dir } },   1, 0, 'w')
     grid_cell( TkLabel.new(@root)  { width label_width; text '    Original'; justify 'right'},   1, 1, 'e')
@@ -59,8 +56,6 @@ class Layout
 
     grid_cell( TkLabel.new(@root)  { width label_width; text '    Current' },                     4, 1, 'e')
     @current_name        = grid_cell( TkEntry.new(@root) { width entry_width },                   4, 2, 'w')
-
-    layout_dir_buttons
   end
 
   def layout_dir_buttons
