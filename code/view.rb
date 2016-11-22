@@ -9,14 +9,12 @@ class View
     @current_filename = current_name_widget
     @image_view = TkLabel.new($root)
     Dir.glob(@dir+'*').each do |full_file_name|
-      puts "#{File.basename(full_file_name)}   ***  #{CheckExif.new(full_file_name).date_time_msg}"
       set_image_and_text(@image.next)
     end
     set_image_and_text(@image.next)
   end
 
   def validate_insert(insert_str)
-    #  puts "validate_insert #{@original_filename.value} using #{insert_str}"
     potential_new_fn = potential_new_filename(insert_str.strip)
     if potential_new_fn
       if @image.change_name(potential_new_fn)
@@ -41,6 +39,10 @@ class View
 
   def tk_lable
     @image_view
+  end
+
+  def refile_and_next(dir)
+    puts dir
   end
 
   private

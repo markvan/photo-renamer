@@ -10,7 +10,6 @@ class ImageFileName
   def initialize(orig_file_name, curr_file_name = ' ')
     make_matchers
     # to work with Lumix Pddddddd formats 'file' must be a full path to a file below '/*'
-    puts "Image file name init: #{orig_file_name} #{curr_file_name}"
     @full_file_name  = orig_file_name.strip
     @short_file_name = File.basename(@full_file_name)
     @curr_file_name = curr_file_name.strip
